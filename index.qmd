@@ -10,12 +10,12 @@ The project will use labor-market and employability data to evaluate career oppo
 
 ## Project Team (Group 5 Members)
 
-Richa Nayak
-Benjamin Nagle
-James Lillis
+Richa Nayak 
+Benjamin Nagle 
+James Lillis 
 Victoria Loukas
 
 ## Industry Selection
-Industry: Animal Food Manufacturing
+Industry: Animal Food Manufacturing 
 NAICS Code: 3111
 
