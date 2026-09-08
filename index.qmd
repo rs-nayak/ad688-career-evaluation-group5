@@ -2,6 +2,20 @@
 title: "AD688 O1 Fall '26 Career Evaluation Team Project - Group 5"
 ---
 
-This is a Quarto website.
+## Project Scope
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).
+
+The project will use labor-market and employability data to evaluate career opportunities, skill requirements, and potential skill gaps within this industry.
+
+## Project Team (Group 5 Members)
+
+Richa Nayak
+Benjamin Nagle
+James Lillis
+Victoria Loukas
+
+## Industry Selection
+Industry: Animal Food Manufacturing
+NAICS Code: 3111
+
