@@ -1,0 +1,30 @@
+project:
+  type: website
+
+website:
+  title: "AD688 O1 Fall '26 Career Evaluation Team Project - Group 5"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: data_preparation.qmd
+        text: Data Preparation
+      - href: market_baseline.qmd
+        text: Market Baseline
+      - href: skill_gap_analysis.qmd
+        text: Skill Gap Analysis
+      - href: career_evaluation.qmd
+        text: Career Evaluation
+      - href: final_recommendations.qmd
+        text: Final Recommendations
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+bibliography: references.bib
+
+
+
