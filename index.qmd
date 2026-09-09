@@ -6,7 +6,7 @@ title: "AD688 O1 Fall '26 Career Evaluation Team Project - Group 5"
 
 Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).
 
-The project will use labor-market and employability data to evaluate career opportunities, skill requirements, and potential skill gaps within this industry.
+The project will use labor-market and employability data to evaluate career opportunities within the Data Science field, skill requirements, and potential skill gaps within this industry.
 
 ## Project Team (Group 5 Members)
 
@@ -18,4 +18,4 @@ The project will use labor-market and employability data to evaluate career oppo
 ## Industry Selection
 - Industry: Animal Food Manufacturing 
 - NAICS Code: 3111
-- Career Pathway: Analytics
+- Career Pathway: Data Science
