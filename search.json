@@ -28,25 +28,39 @@
     "text": "Industry Selection\n\nIndustry: Animal Food Manufacturing\nNAICS Code: 3111"
   },
   {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "This project focuses on the Analytics career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Analyst positions in this industry, including technical, analytical, and business-related skills."
+  },
+  {
+    "objectID": "introduction.html#scope-defined",
+    "href": "introduction.html#scope-defined",
+    "title": "Introduction",
+    "section": "",
+    "text": "This project focuses on the Analytics career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Analyst positions in this industry, including technical, analytical, and business-related skills."
+  },
+  {
     "objectID": "introduction.html#target-user",
     "href": "introduction.html#target-user",
     "title": "Introduction",
     "section": "Target User",
-    "text": "Target User"
+    "text": "Target User\nThe target users are students and early-career job seekers interested in pursuing analytics-related career pathways within the Animal Food Manufacturing industry. The product will help these users understand which skills employers value most so they can identify important skill gaps, prioritize their learning, and better prepare for employment opportunities."
   },
   {
     "objectID": "introduction.html#product-question",
     "href": "introduction.html#product-question",
     "title": "Introduction",
     "section": "Product Question",
-    "text": "Product Question"
+    "text": "Product Question\nWhich skills are most in demand for Data Analyst careers in the Animal Food Manufacturing industry (NAICS 3111)?"
   },
   {
     "objectID": "introduction.html#rationale",
     "href": "introduction.html#rationale",
     "title": "Introduction",
     "section": "Rationale",
-    "text": "Rationale"
+    "text": "Rationale\nAnalyst positions require a combination of technical, analytical, and business skills, but the specific skills employers seek may vary across industries. Even within the Advanced Manufacturing industry, Animal Food Manufacturing may require specific skills and experiences that differ from other types of manufacturing. Students and early-career job seekers interested in Animal Food Manufacturing may therefore benefit from understanding which skills are most frequently requested by employers in this industry."
   },
   {
     "objectID": "introduction.html#literature-review",
