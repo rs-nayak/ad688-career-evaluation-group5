@@ -15,7 +15,7 @@ The project will use labor-market and employability data to evaluate career oppo
 - James Lillis 
 - Victoria Loukas
 
-## Industry Selection
+## Industry Selection & Career Pathway
 - Industry: Animal Food Manufacturing 
 - NAICS Code: 3111
 - Career Pathway: Data Science
