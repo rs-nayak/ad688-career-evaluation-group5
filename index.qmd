@@ -18,4 +18,4 @@ The project will use labor-market and employability data to evaluate career oppo
 ## Industry Selection
 - Industry: Animal Food Manufacturing 
 - NAICS Code: 3111
-
+- Career Pathway: Analytics
