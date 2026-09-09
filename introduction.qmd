@@ -3,11 +3,15 @@ title: "Introduction"
 ---
 
 ## Scope Defined
+This project focuses on the Analytics career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Analyst positions in this industry, including technical, analytical, and business-related skills.
 
 ## Target User
+The target users are students and early-career job seekers interested in pursuing analytics-related career pathways within the Animal Food Manufacturing industry. The product will help these users understand which skills employers value most so they can identify important skill gaps, prioritize their learning, and better prepare for employment opportunities.
 
 ## Product Question
+Which skills are most in demand for Data Analyst careers in the Animal Food Manufacturing industry (NAICS 3111)?
 
 ## Rationale
+Analyst positions require a combination of technical, analytical, and business skills, but the specific skills employers seek may vary across industries. Even within the Advanced Manufacturing industry, Animal Food Manufacturing may require specific skills and experiences that differ from other types of manufacturing. Students and early-career job seekers interested in Animal Food Manufacturing may therefore benefit from understanding which skills are most frequently requested by employers in this industry.
 
 ## Literature Review
