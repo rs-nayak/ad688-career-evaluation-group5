@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5",
     "section": "",
-    "text": "Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).\nThe project will use labor-market and employability data to evaluate career opportunities, skill requirements, and potential skill gaps within this industry."
+    "text": "Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).\nThe project will use labor-market and employability data to evaluate career opportunities within the Data Science field, skill requirements, and potential skill gaps within this industry."
   },
   {
     "objectID": "index.html#project-scope",
     "href": "index.html#project-scope",
     "title": "AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5",
     "section": "",
-    "text": "Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).\nThe project will use labor-market and employability data to evaluate career opportunities, skill requirements, and potential skill gaps within this industry."
+    "text": "Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).\nThe project will use labor-market and employability data to evaluate career opportunities within the Data Science field, skill requirements, and potential skill gaps within this industry."
   },
   {
     "objectID": "index.html#project-team-group-5-members",
@@ -25,48 +25,48 @@
     "href": "index.html#industry-selection",
     "title": "AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5",
     "section": "Industry Selection",
-    "text": "Industry Selection\n\nIndustry: Animal Food Manufacturing\nNAICS Code: 3111\nCareer Pathway: Analytics"
+    "text": "Industry Selection\n\nIndustry: Animal Food Manufacturing\nNAICS Code: 3111\nCareer Pathway: Data Science"
   },
   {
     "objectID": "introduction.html",
     "href": "introduction.html",
     "title": "Introduction",
     "section": "",
-    "text": "This project focuses on the Analytics career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Analyst positions in this industry, including technical, analytical, and business-related skills."
+    "text": "This project focuses on the Data Science career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Data Science positions in this industry, including technical, analytical, and machine learning-related skills."
   },
   {
     "objectID": "introduction.html#scope-defined",
     "href": "introduction.html#scope-defined",
     "title": "Introduction",
     "section": "",
-    "text": "This project focuses on the Analytics career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Analyst positions in this industry, including technical, analytical, and business-related skills."
+    "text": "This project focuses on the Data Science career pathway within the Animal Food Manufacturing industry (NAICS 3111). The analysis will examine the skills employers most frequently demand for Data Science positions in this industry, including technical, analytical, and machine learning-related skills."
   },
   {
     "objectID": "introduction.html#target-user",
     "href": "introduction.html#target-user",
     "title": "Introduction",
     "section": "Target User",
-    "text": "Target User\nThe target users are students and early-career job seekers interested in pursuing analytics-related career pathways within the Animal Food Manufacturing industry. The product will help these users understand which skills employers value most so they can identify important skill gaps, prioritize their learning, and better prepare for employment opportunities."
+    "text": "Target User\nThe target users are students and early-career job seekers interested in pursuing data science-related career pathways within the Animal Food Manufacturing industry. The product will help these users understand which skills employers value most so they can identify important skill gaps, prioritize their learning, and better prepare for employment opportunities."
   },
   {
     "objectID": "introduction.html#product-question",
     "href": "introduction.html#product-question",
     "title": "Introduction",
     "section": "Product Question",
-    "text": "Product Question\nWhich skills are most in demand for Data Analyst careers in the Animal Food Manufacturing industry (NAICS 3111)?"
+    "text": "Product Question\nWhich skills are most in demand for Data Science careers in the Animal Food Manufacturing industry (NAICS 3111)?"
   },
   {
     "objectID": "introduction.html#rationale",
     "href": "introduction.html#rationale",
     "title": "Introduction",
     "section": "Rationale",
-    "text": "Rationale\nAnalyst positions require a combination of technical, analytical, and business skills, but the specific skills employers seek may vary across industries. Even within the Advanced Manufacturing industry, Animal Food Manufacturing may require specific skills and experiences that differ from other types of manufacturing. Students and early-career job seekers interested in Animal Food Manufacturing may therefore benefit from understanding which skills are most frequently requested by employers in this industry."
+    "text": "Rationale\nData Science positions require a combination of technical, analytical, and machine learning-adjacent skills, but the specific skills employers seek may vary across industries. Even within the Advanced Manufacturing industry, Animal Food Manufacturing may require specific skills and experiences that differ from other types of manufacturing. Students and early-career job seekers interested in Animal Food Manufacturing may therefore benefit from understanding which skills are most frequently requested by employers in this industry."
   },
   {
     "objectID": "introduction.html#literature-review",
     "href": "introduction.html#literature-review",
     "title": "Introduction",
     "section": "Literature Review",
-    "text": "Literature Review"
+    "text": "Literature Review\nDevi, P. Nath, S. Barua, B. Saha, T. (2025). Big data and artificial intelligence in animal nutrition: a new era of precision feeding. Tropical Animal Health and Production. https://pmc.ncbi.nlm.nih.gov/articles/PMC13167828/\n\nThe utilization of Big Data and Artificial Intelligence (AI) is revolutionizing animal nutrition by guiding precision feeding systems that are individualized, data-driven, and sustainability-oriented. The paper shows the results of AI usage in animal nutrition such as, precision feeding in pigs that reduced production costs by more than 8%, decreased protein and phosphorus intake by 25%, lowered nutrient excretion by 40%, and reduce greenhouse gas (GHGs) emissions by 6%, while maintaining or improved performance. In dairy systems, precision feed management strategies have achieved 9.7% lower dietary crude protein levels, 14% reductions in manure nitrogen excretion, and annual net income gains of USD 137 per cow.\n\nZhang, S. Changhua, L. Zhao, J. Wang, J. (2025). Big Data and AI-Powered Modeling: A Pathway to Sustainable Precision Animal Nutrition. Advanced Science. https://pmc.ncbi.nlm.nih.gov/articles/PMC12591130/\n\nTraditional mathematical models are limited when it comes to precision nutrition and feeding for individual animals. Emerging technology, namely big data and artificial intelligence (AI), have shown the possibility of overcoming those shortcomings. This paper gives an overview of various applications of big data and AI‐powered modeling in animal nutrition and feeding, covering techniques including intelligent data acquisition, in vitro kinetics and multi‐omics data mining, data augmentation, advanced and explainable machine learning algorithms, multi‐objective and heuristic algorithms, and life cycle assessment‐based sustainability with case studies that assess the results of pigs and alternative feed ingredients.\n\nBrown-Brandl, T. Tao, J. (2025) ASAS-NANP Symposium: mathematical modeling in animal nutrition: harnessing real-time data and digital twins for precision livestock farming. Journal of Animal Science. https://academic.oup.com/jas/article/doi/10.1093/jas/skaf138/8124705\n\nA technique called Precision Livestock Farming (PLF) has emerged as a solution to concerns over animal welfare and sustainability. By utilizing sensors, Internet of Things, and data analytics to enhance animal management, and digital twin technology (replicas of animals), animal food manifacturing can be made more sustainable. This report showcases the vast potential of PLF and digital twin technology. By integrating real-time data with digital twins it creates a technological breakthrough with the potential to transform PLF. PLF’s advancements in artificial intelligence, machine learning, blockchain, and augmented reality, which are expected to hep develop more innovations and enhance the capabilities of digital twins. and make livestock farming more sustainable."
   }
 ]
