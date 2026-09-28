@@ -4,17 +4,19 @@ title: "Introduction"
 
 ## Scope Defined
 
-This project focuses on the **Data Scientists career pathway within the Scientific Research and Development Services industry (NAICS 5417)**.
+For this project, we are focusing on **Data Scientists in the Scientific Research and Development Services industry (NAICS 5417)**.
 
-The analysis examines the current labor market for Data Scientist positions within this industry, with a particular focus on the skills employers most frequently demand. Additional market characteristics, including salary, geographic location, experience requirements, work arrangements, and employer demand, are analyzed to provide context for the career pathway.
+We want to better understand what the job market looks like for Data Scientists in this industry, especially the skills employers are looking for. We will also look at factors such as salary, location, experience requirements, work arrangements, and the companies hiring for these positions.
 
-The project uses 2026 job-posting data from the MET Career Compass dataset. After filtering and data preparation, the final analytical dataset contains **760 Data Scientist job postings within NAICS 5417**.
+Using the MET Career Compass 2026 dataset, we narrowed the data to Data Scientist job postings within NAICS 5417. After cleaning and preparing the data, our final dataset contains **760 job postings** that will be used throughout the project.
 
 ## Target User
 
-The target users are **students and early-career job seekers interested in pursuing Data Scientist and related data-science careers**.
+Our target users are **students and early-career job seekers who are interested in becoming Data Scientists or pursuing similar data-focused careers**.
 
-The product is designed to help these users understand the skills employers currently request for Data Scientist positions within Scientific Research and Development Services. By identifying the most frequently requested skills and technologies, users can compare market demand with their own capabilities, identify potential skill gaps, prioritize areas for learning and professional development, and better prepare for relevant employment opportunities.
+It can be difficult to know which skills to focus on when preparing for a career in data science. Job postings often list a wide range of programming languages, software tools, technical skills, and experience requirements. Our goal is to make that information easier to understand by identifying the skills that appear most often in actual job postings.
+
+This can help someone compare their current skills with what employers are looking for and decide which areas they may want to strengthen as they prepare for the job market.
 
 ## Product Question
 
@@ -22,12 +24,12 @@ The product is designed to help these users understand the skills employers curr
 
 ## Rationale
 
-Data Scientist positions require a combination of programming, statistical, analytical, machine-learning, and data-management capabilities. However, the specific skills requested by employers can vary depending on the industry and the type of work being performed.
+We chose to focus on skills because knowing that Data Scientist jobs are available is only part of understanding the career market. Someone preparing for these roles also needs to know **what employers expect applicants to know**.
 
-Scientific Research and Development Services provides a relevant setting for examining Data Scientist careers because organizations in this industry use data-intensive methods, statistical analysis, machine learning, artificial intelligence, and computational tools to support research and innovation.
+Data Scientist positions can require a mix of programming, data analysis, statistics, machine learning, and other technical skills. The exact combination can also vary depending on the industry and the type of work being done.
 
-Focusing specifically on **NAICS 5417** allows the project to examine skill demand within a defined industry rather than across the entire Data Scientist labor market. This creates a more focused comparison between employer demand and the skills that students and early-career job seekers may need to develop.
+By focusing on **Scientific Research and Development Services (NAICS 5417)**, we can look at these requirements within a specific industry rather than combining Data Scientist jobs from many different industries.
 
-The analysis therefore focuses on identifying the skills and software technologies that appear most frequently in Data Scientist job postings. These findings will provide the market benchmark for the project's later Skill Gap Analysis and Career Evaluation.
+Our analysis will identify the skills and software tools that appear most frequently in these job postings. Later in the project, we can use these results as a benchmark for the Skill Gap Analysis and Career Evaluation.
 
 ## Literature Review

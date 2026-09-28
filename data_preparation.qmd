@@ -38,13 +38,20 @@ The four-digit `naics4` field was used to identify postings belonging to this in
 
 ## Career-Pathway Filter
 
-The career pathway is **Data Scientists**.
-
-The `onet_name` field was used as the occupation mapping. Records were retained when:
+The career pathway was filtered using the O*NET occupation field:
 
 `onet_name = "Data Scientists"`
 
-Using the O*NET occupation classification provides a consistent role definition even when individual postings use different job titles, such as Data Scientist, Senior Data Scientist, Machine Learning Engineer, or AI-related titles.
+We chose the O*NET occupation mapping instead of relying only on job-title keywords because employers may use different titles for positions that belong to the same occupation. For example, postings in the filtered dataset include titles such as Data Scientist, Machine Learning Engineer, Senior AI Engineer, and Machine Learning Research Engineer.
+
+Using the O*NET mapping gives us a more consistent way to identify postings associated with the Data Scientists occupation while still allowing us to examine differences in the actual job titles used by employers.
+
+The final career and industry filter therefore combines:
+
+- **NAICS 5417** — Scientific Research and Development Services
+- **O*NET occupation** — Data Scientists
+
+This keeps the dataset aligned with both the selected industry and career pathway throughout the analysis.
 
 ## Record Counts
 

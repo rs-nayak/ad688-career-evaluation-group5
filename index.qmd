@@ -46,4 +46,4 @@ The project is organized into several stages:
 
 ## Data Source
 
-The analysis uses the **MET Career Compass 2026 job-posting dataset**. The final analytical dataset is restricted to Data Scientist postings within NAICS 5417 and is used throughout the project's market and skills analyses.
+The analysis uses the Jobs 2026 parquet files provided via Google Drive by our professor. The final analytical dataset is restricted to Data Scientist postings within NAICS 5417 and is used throughout the project's market and skills analyses.
