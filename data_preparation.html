@@ -134,8 +134,35 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#project-scope" id="toc-project-scope" class="nav-link active" data-scroll-target="#project-scope">Project Scope</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
+  <li><a href="#industry-filter" id="toc-industry-filter" class="nav-link" data-scroll-target="#industry-filter">Industry Filter</a></li>
+  <li><a href="#career-pathway-filter" id="toc-career-pathway-filter" class="nav-link" data-scroll-target="#career-pathway-filter">Career-Pathway Filter</a></li>
+  <li><a href="#record-counts" id="toc-record-counts" class="nav-link" data-scroll-target="#record-counts">Record Counts</a></li>
+  <li><a href="#date-window" id="toc-date-window" class="nav-link" data-scroll-target="#date-window">Date Window</a></li>
+  <li><a href="#cleaning-decisions" id="toc-cleaning-decisions" class="nav-link" data-scroll-target="#cleaning-decisions">Cleaning Decisions</a>
+  <ul class="collapse">
+  <li><a href="#duplicate-records" id="toc-duplicate-records" class="nav-link" data-scroll-target="#duplicate-records">Duplicate Records</a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing Values</a></li>
+  <li><a href="#salary" id="toc-salary" class="nav-link" data-scroll-target="#salary">Salary</a></li>
+  <li><a href="#experience-requirements" id="toc-experience-requirements" class="nav-link" data-scroll-target="#experience-requirements">Experience Requirements</a></li>
+  <li><a href="#education-requirements" id="toc-education-requirements" class="nav-link" data-scroll-target="#education-requirements">Education Requirements</a></li>
+  <li><a href="#skill-fields" id="toc-skill-fields" class="nav-link" data-scroll-target="#skill-fields">Skill Fields</a></li>
+  <li><a href="#remote-and-onsite-indicators" id="toc-remote-and-onsite-indicators" class="nav-link" data-scroll-target="#remote-and-onsite-indicators">Remote and Onsite Indicators</a></li>
+  <li><a href="#location-fields" id="toc-location-fields" class="nav-link" data-scroll-target="#location-fields">Location Fields</a></li>
+  <li><a href="#industry-and-occupation-fields" id="toc-industry-and-occupation-fields" class="nav-link" data-scroll-target="#industry-and-occupation-fields">Industry and Occupation Fields</a></li>
+  <li><a href="#inconsistent-labels" id="toc-inconsistent-labels" class="nav-link" data-scroll-target="#inconsistent-labels">Inconsistent Labels</a></li>
+  </ul></li>
+  <li><a href="#data-coverage" id="toc-data-coverage" class="nav-link" data-scroll-target="#data-coverage">Data Coverage</a></li>
+  <li><a href="#analytical-limitations" id="toc-analytical-limitations" class="nav-link" data-scroll-target="#analytical-limitations">Analytical Limitations</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -159,8 +186,350 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="project-scope" class="level2">
+<h2 class="anchored" data-anchor-id="project-scope">Project Scope</h2>
+<p>This page documents how the MET Career Compass job-posting data was filtered and cleaned to create the analytical dataset used throughout the rest of the project. The analysis focuses on one career pathway and one industry so that the results remain aligned with the project’s product question.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Element</strong></th>
+<th><strong>Selection</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Industry</td>
+<td>Scientific Research and Development Services</td>
+</tr>
+<tr class="even">
+<td>NAICS code</td>
+<td>5417</td>
+</tr>
+<tr class="odd">
+<td>Career pathway</td>
+<td>Data Scientists</td>
+</tr>
+<tr class="even">
+<td>Date window</td>
+<td>January 6, 2026–August 23, 2026</td>
+</tr>
+<tr class="odd">
+<td>Final panel size</td>
+<td>760 postings</td>
+</tr>
+</tbody>
+</table>
+<p>Our product question focuses on identifying the skills most in demand for Data Scientists within Scientific Research and Development Services.</p>
+</section>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>The analysis uses the MET Career Compass 2026 job-posting dataset supplied in Parquet format.</p>
+<p>The source contains posting-level information on job titles, employers, salary, location, work arrangement, experience, education, skills, occupation, and industry.</p>
+<p>The raw Parquet files are processed using PySpark. The final cleaned analytical dataset is exported as:</p>
+<p><code>output/career_market_panel.csv</code></p>
+<p>A corresponding data dictionary is exported as:</p>
+<p><code>output/data_dictionary.csv</code></p>
+</section>
+<section id="industry-filter" class="level2">
+<h2 class="anchored" data-anchor-id="industry-filter">Industry Filter</h2>
+<p>The analysis is restricted to <strong>NAICS 5417 — Scientific Research and Development Services</strong>.</p>
+<p>The four-digit <code>naics4</code> field was used to identify postings belonging to this industry. Restricting the analysis to a single NAICS code keeps the project focused on the Data Scientist labor market within the selected industry rather than the overall labor market.</p>
+</section>
+<section id="career-pathway-filter" class="level2">
+<h2 class="anchored" data-anchor-id="career-pathway-filter">Career-Pathway Filter</h2>
+<p>The career pathway is <strong>Data Scientists</strong>.</p>
+<p>The <code>onet_name</code> field was used as the occupation mapping. Records were retained when:</p>
+<p><code>onet_name = "Data Scientists"</code></p>
+<p>Using the O*NET occupation classification provides a consistent role definition even when individual postings use different job titles, such as Data Scientist, Senior Data Scientist, Machine Learning Engineer, or AI-related titles.</p>
+</section>
+<section id="record-counts" class="level2">
+<h2 class="anchored" data-anchor-id="record-counts">Record Counts</h2>
+<p>The initial NAICS 5417 and Data Scientists filter produced <strong>1,120 postings</strong>.</p>
+<p>Potential duplicate advertisements were then removed using posting-level characteristics rather than the source ID alone.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Step</strong></th>
+<th style="text-align: right;"><strong>Postings</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Initial NAICS 5417 + Data Scientists filter</td>
+<td style="text-align: right;">1,120</td>
+</tr>
+<tr class="even">
+<td>After duplicate removal</td>
+<td style="text-align: right;">930</td>
+</tr>
+<tr class="odd">
+<td>Final 2026 analytical panel</td>
+<td style="text-align: right;">760</td>
+</tr>
+</tbody>
+</table>
+<p>A total of <strong>190 duplicate records</strong> were removed before the final date window was applied.</p>
+</section>
+<section id="date-window" class="level2">
+<h2 class="anchored" data-anchor-id="date-window">Date Window</h2>
+<p>The final analysis is restricted to postings from <strong>2026</strong>.</p>
+<p>The earliest posting in the final panel is:</p>
+<p><code>2026-01-06</code></p>
+<p>The latest posting is:</p>
+<p><code>2026-08-23</code></p>
+<p>Restricting the dataset to 2026 provides a current-period view of the selected labor market and prevents older postings from being mixed with the current market baseline.</p>
+</section>
+<section id="cleaning-decisions" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-decisions">Cleaning Decisions</h2>
+<section id="duplicate-records" class="level3">
+<h3 class="anchored" data-anchor-id="duplicate-records">Duplicate Records</h3>
+<p>Unique source IDs did not necessarily represent unique job advertisements. We therefore identified potential duplicates using exact matches on:</p>
+<ul>
+<li>Job title</li>
+<li>Employer</li>
+<li>Location</li>
+<li>Posting date</li>
+<li>Lower salary bound</li>
+<li>Upper salary bound</li>
+</ul>
+<p>Using this posting-level definition reduced the dataset from <strong>1,120 to 930 records</strong>, removing <strong>190 duplicate postings</strong>.</p>
+<p>Records with differences in these attributes were retained because they could represent distinct opportunities.</p>
+</section>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing Values</h3>
+<p>Missing information appeared in several forms, including null values, blank strings, empty arrays, and text values such as <code>"null"</code>, <code>"none"</code>, <code>"n/a"</code>, <code>"na"</code>, and <code>"unknown"</code>.</p>
+<p>These values were standardized during cleaning.</p>
+<p>We generally did not delete an entire posting because one field was missing. Instead, missing categorical information was retained as <strong>Unknown</strong> or <strong>Not specified</strong> where appropriate.</p>
+<p>This approach preserves usable information from the rest of the posting while keeping data-quality limitations visible.</p>
+</section>
+<section id="salary" class="level3">
+<h3 class="anchored" data-anchor-id="salary">Salary</h3>
+<p>Salary required several cleaning steps.</p>
+<p>The original salary fields were first converted safely to numeric values. Invalid text values were converted to missing values rather than causing conversion errors.</p>
+<p>Reported pay was then standardized to an annual basis:</p>
+<ul>
+<li>Annual salaries were retained as reported.</li>
+<li>Monthly salaries were multiplied by 12.</li>
+<li>Hourly salaries were multiplied by 2,080 hours.</li>
+<li>Salaries with unsupported or unknown pay periods were not annualized.</li>
+</ul>
+<p>Three analytical salary variables were created:</p>
+<ul>
+<li><code>annual_salary_from</code></li>
+<li><code>annual_salary_to</code></li>
+<li><code>annual_salary_midpoint</code></li>
+</ul>
+<p>Salary ranges were also classified according to whether they were valid, partial, missing, or invalid.</p>
+<p>Missing salary values were <strong>not imputed</strong>.</p>
+<p>Potential extreme values were identified using the interquartile range (IQR) method and stored in the <code>salary_outlier</code> field. These observations were flagged rather than automatically deleted from the final analytical dataset.</p>
+<p>In the final 2026 panel:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Salary Measure</strong></th>
+<th style="text-align: right;"><strong>Result</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Postings with usable salary</td>
+<td style="text-align: right;">240</td>
+</tr>
+<tr class="even">
+<td>Share of panel</td>
+<td style="text-align: right;">31.6%</td>
+</tr>
+<tr class="odd">
+<td>Mean annual salary midpoint</td>
+<td style="text-align: right;">$195,417</td>
+</tr>
+<tr class="even">
+<td>Potential outliers flagged</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+<p>Salary findings therefore describe the subset of postings that disclose usable compensation rather than every posting in the market.</p>
+</section>
+<section id="experience-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="experience-requirements">Experience Requirements</h3>
+<p>Minimum and maximum years of experience were converted to numeric values where available.</p>
+<p>A standardized experience category was created using the minimum reported experience:</p>
+<ul>
+<li>0 years minimum</li>
+<li>1–2 years</li>
+<li>3–5 years</li>
+<li>6–10 years</li>
+<li>10+ years</li>
+<li>Not specified</li>
+</ul>
+<p>Missing experience information was classified as <strong>Not specified</strong> rather than assumed to mean zero years.</p>
+<p>This distinction is important because a missing experience requirement does not necessarily mean that an employer requires no previous experience.</p>
+</section>
+<section id="education-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="education-requirements">Education Requirements</h3>
+<p>Education information was converted into an array structure so that postings containing multiple education levels could be represented consistently.</p>
+<p>Missing education requirements were retained rather than inferred or imputed.</p>
+</section>
+<section id="skill-fields" class="level3">
+<h3 class="anchored" data-anchor-id="skill-fields">Skill Fields</h3>
+<p>The dataset contains several types of skill information. These fields were converted into arrays so that individual skills could be separated and counted across postings.</p>
+<p>The final dataset retains:</p>
+<ul>
+<li>Overall skills</li>
+<li>Specialized skills</li>
+<li>Common skills</li>
+<li>Software skills</li>
+<li>Certifications</li>
+</ul>
+<p>Skills information is available for <strong>733 of the 760 final postings</strong>, giving approximately <strong>96.4% coverage</strong>.</p>
+<p>The array structure allows the market analysis to identify how frequently individual skills such as Python, Machine Learning, SQL, and TensorFlow appear across postings.</p>
+</section>
+<section id="remote-and-onsite-indicators" class="level3">
+<h3 class="anchored" data-anchor-id="remote-and-onsite-indicators">Remote and Onsite Indicators</h3>
+<p>Work-arrangement labels were standardized into four categories:</p>
+<ul>
+<li>Remote</li>
+<li>Hybrid</li>
+<li>Onsite</li>
+<li>Unknown</li>
+</ul>
+<p>Text containing variations of remote, hybrid, or onsite was mapped to the appropriate standardized category.</p>
+<p>Missing or unrecognized information was classified as <strong>Unknown</strong>. Unknown was not assumed to mean onsite.</p>
+<p>In the final dataset:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Work Arrangement</strong></th>
+<th style="text-align: right;"><strong>Postings</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unknown</td>
+<td style="text-align: right;">389</td>
+</tr>
+<tr class="even">
+<td>Hybrid</td>
+<td style="text-align: right;">170</td>
+</tr>
+<tr class="odd">
+<td>Remote</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="even">
+<td>Onsite</td>
+<td style="text-align: right;">51</td>
+</tr>
+</tbody>
+</table>
+<p>Because work arrangement is unknown for a substantial portion of the dataset, comparisons between remote, hybrid, and onsite work should be interpreted with this limitation in mind.</p>
+</section>
+<section id="location-fields" class="level3">
+<h3 class="anchored" data-anchor-id="location-fields">Location Fields</h3>
+<p>City and state fields contained missing values and inconsistent labels.</p>
+<p>Unavailable or unusable locations were standardized as <strong>Unknown</strong> rather than deleting the associated job posting.</p>
+<p>Several identifiable formatting inconsistencies were also corrected. For example:</p>
+<ul>
+<li><code>Mclean, Virginia, United States</code> → <code>McLean</code></li>
+<li><code>New York, United States</code> → <code>New York</code></li>
+</ul>
+<p>The cleaned variables <code>city_clean</code> and <code>state_clean</code> are used for the geographic analysis.</p>
+<p>The final dataset contains <strong>264 postings with an unknown state</strong> and <strong>280 postings with an unknown city</strong>. These records remain in the analytical dataset.</p>
+</section>
+<section id="industry-and-occupation-fields" class="level3">
+<h3 class="anchored" data-anchor-id="industry-and-occupation-fields">Industry and Occupation Fields</h3>
+<p>The final dataset retains both the O*NET occupation fields and the four-digit NAICS fields:</p>
+<ul>
+<li><code>onet</code></li>
+<li><code>onet_name</code></li>
+<li><code>naics4</code></li>
+<li><code>naics4_name</code></li>
+</ul>
+<p>These fields ensure that the analysis remains anchored to the selected <strong>Data Scientists</strong> occupation and <strong>NAICS 5417</strong> industry throughout the project.</p>
+</section>
+<section id="inconsistent-labels" class="level3">
+<h3 class="anchored" data-anchor-id="inconsistent-labels">Inconsistent Labels</h3>
+<p>Categorical fields were standardized where a clear correction could be made without introducing unsupported assumptions.</p>
+<p>For example, work-arrangement variations were grouped into Remote, Hybrid, Onsite, and Unknown, while known city formatting inconsistencies were corrected.</p>
+<p>When the correct value could not be determined confidently, the record was classified as Unknown rather than guessing a replacement.</p>
+</section>
+</section>
+<section id="data-coverage" class="level2">
+<h2 class="anchored" data-anchor-id="data-coverage">Data Coverage</h2>
+<p>Coverage varies substantially across the analytical variables.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Field</strong></th>
+<th style="text-align: right;"><strong>Available</strong></th>
+<th style="text-align: right;"><strong>Missing / Unknown</strong></th>
+<th style="text-align: right;"><strong>Coverage</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total postings</td>
+<td style="text-align: right;">760</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr class="even">
+<td>Skills</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">96.4%</td>
+</tr>
+<tr class="odd">
+<td>Salary</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">520</td>
+<td style="text-align: right;">31.6%</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">264</td>
+<td style="text-align: right;">65.3%</td>
+</tr>
+<tr class="odd">
+<td>City</td>
+<td style="text-align: right;">480</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">63.2%</td>
+</tr>
+<tr class="even">
+<td>Known work arrangement</td>
+<td style="text-align: right;">371</td>
+<td style="text-align: right;">389</td>
+<td style="text-align: right;">48.8%</td>
+</tr>
+</tbody>
+</table>
+<p>Skills have strong coverage, while salary, location, and work-arrangement information are less complete.</p>
+<p>For this reason, analyses involving these variables use their available observations and explicitly report the missing or Unknown category rather than treating missing values as observed information.</p>
+</section>
+<section id="analytical-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="analytical-limitations">Analytical Limitations</h2>
+<p>Several limitations carry into the market analysis.</p>
+<p><strong>Salary coverage is limited.</strong> Only 240 of 760 postings contain usable salary information. Salary statistics therefore describe salary-reporting postings rather than the complete market.</p>
+<p><strong>Location information is incomplete.</strong> State information is unknown for 264 postings and city information is unknown for 280 postings. Geographic results describe where postings with identifiable locations are concentrated.</p>
+<p><strong>Work arrangement is frequently unknown.</strong> Remote, hybrid, or onsite status could be identified for 371 postings, while 389 remain Unknown.</p>
+<p><strong>Experience information is incomplete.</strong> A large number of postings do not specify an experience requirement. Missing experience was therefore kept separate from postings reporting a zero-year minimum.</p>
+<p><strong>The dataset represents observed postings rather than the entire labor market.</strong> The findings describe the postings contained in the MET Career Compass dataset within the selected career, industry, and date window and should not be interpreted as a complete census of all Data Scientist opportunities.</p>
+</section>
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<p>After filtering, duplicate removal, cleaning, and application of the final date window, the analytical panel contains:</p>
+<p><strong>760 postings and 27 variables</strong></p>
+<p>The cleaned dataset is saved as:</p>
+<p><code>output/career_market_panel.csv</code></p>
+<p>The accompanying data dictionary is saved as:</p>
+<p><code>output/data_dictionary.csv</code></p>
+<p>These files are used for the Market Baseline analysis and will support the later Skill Gap Analysis and Career Evaluation stages of the project.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
