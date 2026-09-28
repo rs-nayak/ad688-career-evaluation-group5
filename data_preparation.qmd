@@ -49,7 +49,7 @@ Using the O*NET mapping gives us a more consistent way to identify postings asso
 The final career and industry filter therefore combines:
 
 - **NAICS 5417** — Scientific Research and Development Services
-- **O*NET occupation** — Data Scientists
+- **ONET occupation** — Data Scientists
 
 This keeps the dataset aligned with both the selected industry and career pathway throughout the analysis.
 
@@ -270,7 +270,7 @@ Several limitations carry into the market analysis.
 
 **Experience information is incomplete.** A large number of postings do not specify an experience requirement. Missing experience was therefore kept separate from postings reporting a zero-year minimum.
 
-**The dataset represents observed postings rather than the entire labor market.** The findings describe the postings contained in the MET Career Compass dataset within the selected career, industry, and date window and should not be interpreted as a complete census of all Data Scientist opportunities.
+**The dataset represents observed postings rather than the entire labor market.** The findings describe the postings contained in the MET Career Compass (Jobs 2026) dataset provided for the class within the selected career, industry, and date window. This should not be interpreted as a complete census of all Data Scientist opportunities.
 
 ## Output
 

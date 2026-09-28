@@ -42,18 +42,18 @@ The Data Scientists occupation contains several different employer-facing job ti
 
 ### Top Job Titles
 
-| **Rank** | **Job Title** | **Postings** |
-|---:|---|---:|
-| 1 | Data Scientists | 207 |
-| 2 | Data Scientist | 19 |
-| 3 | Machine Learning Engineer | 15 |
-| 4 | Senior Machine Learning Engineer | 14 |
-| 4 | Senior Data Scientist | 14 |
-| 6 | Staff Machine Learning Engineer | 9 |
-| 7 | Senior AI Engineer | 8 |
-| 7 | Machine Learning Research Engineer | 8 |
-| 9 | AI Engineer | 6 |
-| 10 | Agentic AI Engineer | 5 |
+| **Job Title** | **Postings** |
+|---|---:|
+| Data Scientists | 207 |
+| Data Scientist | 19 |
+| Machine Learning Engineer | 15 |
+| Senior Machine Learning Engineer | 14 |
+| Senior Data Scientist | 14 |
+| Staff Machine Learning Engineer | 9 |
+| Senior AI Engineer | 8 |
+| Machine Learning Research Engineer | 8 |
+| AI Engineer | 6 |
+| Agentic AI Engineer | 5 |
 
 The standardized **Data Scientists** title is the largest individual title group with 207 postings. The remaining postings include a variety of Data Scientist, Machine Learning, and AI-related titles, showing that relevant opportunities may appear under several different job titles.
 
@@ -63,18 +63,18 @@ The standardized **Data Scientists** title is the largest individual title group
 
 ### Employer Results
 
-| **Rank** | **Employer** | **Postings** |
-|---:|---|---:|
-| 1 | Amazon | 55 |
-| 2 | Tiger Analytics | 28 |
-| 3 | Pinterest | 17 |
-| 4 | Jobs.thermofisher.com | 11 |
-| 4 | Booz Allen Hamilton | 11 |
-| 6 | Profluent | 10 |
-| 7 | Jobgether | 9 |
-| 7 | Grvty | 9 |
-| 9 | Flagshippioneeringinc | 8 |
-| 9 | Eurofins | 8 |
+| **Employer** | **Postings** |
+|---|---:|
+| Amazon | 55 |
+| Tiger Analytics | 28 |
+| Pinterest | 17 |
+| Jobs.thermofisher.com | 11 |
+| Booz Allen Hamilton | 11 |
+| Profluent | 10 |
+| Jobgether | 9 |
+| Grvty | 9 |
+| Flagshippioneeringinc | 8 |
+| Eurofins | 8 |
 
 ![Top 10 employers hiring Data Scientists](figures/top_employers.png){fig-align="center" width="85%"}
 
@@ -88,18 +88,18 @@ Amazon had the highest number of Data Scientist postings with **55 jobs**, follo
 
 ### Top Identified States
 
-| **Rank** | **State** | **Postings** |
-|---:|---|---:|
-| 1 | California | 136 |
-| 2 | New York | 75 |
-| 3 | Virginia | 37 |
-| 4 | Massachusetts | 33 |
-| 5 | District of Columbia | 29 |
-| 6 | Texas | 24 |
-| 7 | Washington | 21 |
-| 8 | Illinois | 17 |
-| 9 | North Carolina | 16 |
-| 9 | Maryland | 16 |
+| **State** | **Postings** |
+|---|---:|
+| California | 136 |
+| New York | 75 |
+| Virginia | 37 |
+| Massachusetts | 33 |
+| District of Columbia | 29 |
+| Texas | 24 |
+| Washington | 21 |
+| Illinois | 17 |
+| North Carolina | 16 |
+| Maryland | 16 |
 
 ![Top states for Data Scientist job postings](figures/top_states.png){fig-align="center" width="85%"}
 
@@ -183,18 +183,18 @@ Skills information was available for **733 of the 760 postings**, representing a
 
 ### Top Skills
 
-| **Rank** | **Skill** | **Postings** |
-|---:|---|---:|
-| 1 | Python | 416 |
-| 2 | Machine Learning | 281 |
-| 3 | Data Science | 224 |
-| 4 | SQL | 197 |
-| 5 | Computer Science | 107 |
-| 6 | TensorFlow | 95 |
-| 7 | Software Engineering | 85 |
-| 8 | Research | 68 |
-| 8 | Deep Learning | 68 |
-| 10 | Data Pipelines | 66 |
+| **Skill** | **Postings** |
+|---|---:|
+| Python | 416 |
+| Machine Learning | 281 |
+| Data Science | 224 |
+| SQL | 197 |
+| Computer Science | 107 |
+| TensorFlow | 95 |
+| Software Engineering | 85 |
+| Research | 68 |
+| Deep Learning | 68 |
+| Data Pipelines | 66 |
 
 ![Top skills in Data Scientist job postings](figures/top_skills.png){fig-align="center" width="85%"}
 
@@ -208,18 +208,18 @@ Skills information was available for **733 of the 760 postings**, representing a
 
 ### Top Software Skills
 
-| **Rank** | **Software Skill** | **Postings** |
-|---:|---|---:|
-| 1 | Python | 416 |
-| 2 | SQL | 197 |
-| 3 | TensorFlow | 95 |
-| 4 | Software Engineering | 85 |
-| 5 | C++ | 63 |
-| 6 | Software Development | 58 |
-| 7 | Tableau | 47 |
-| 8 | Databricks | 39 |
-| 9 | Kubernetes | 38 |
-| 10 | Power BI | 37 |
+| **Software Skill** | **Postings** |
+|---|---:|
+| Python | 416 |
+| SQL | 197 |
+| TensorFlow | 95 |
+| Software Engineering | 85 |
+| C++ | 63 |
+| Software Development | 58 |
+| Tableau | 47 |
+| Databricks | 39 |
+| Kubernetes | 38 |
+| Power BI | 37 |
 
 ![Top software skills in Data Scientist job postings](figures/top_software_skills.png){fig-align="center" width="85%"}
 
