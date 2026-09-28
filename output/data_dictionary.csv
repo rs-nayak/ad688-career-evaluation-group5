@@ -1,0 +1,28 @@
+variable,description
+id,Unique identifier for the job posting
+posted_date,Date the job posting was posted
+title_clean,Cleaned job title
+company_clean,Cleaned employer name
+city_clean,Cleaned city; Unknown indicates unavailable or unusable location data
+state_clean,Cleaned U.S. state; Unknown indicates unavailable or unusable location data
+employment_type_clean,Standardized employment type
+remote_type_clean,"Standardized work arrangement such as Remote, Hybrid, Onsite, or Unknown"
+annual_salary_from,Lower salary bound standardized to annual USD; hourly and monthly salaries were annualized
+annual_salary_to,Upper salary bound standardized to annual USD; hourly and monthly salaries were annualized
+annual_salary_midpoint,Midpoint of the valid standardized annual salary range
+salary_range_status,Data-quality status of the salary range
+salary_outlier,Indicates whether annual salary was flagged as a potential outlier
+min_experience_years,Minimum years of experience reported in the posting
+max_experience_years,Maximum years of experience reported in the posting
+experience_level,Experience category derived from the reported minimum years of experience; missing requirements are classified as Not specified
+experience_range_status,Data-quality status of the experience range
+education_array,Education levels associated with the job posting
+skills_array,Skills associated with the job posting
+specialized_skills_array,Specialized skills associated with the job posting
+common_skills_array,Common skills associated with the job posting
+software_skills_array,Software or technology skills associated with the job posting
+certifications_array,Certifications associated with the job posting
+onet,O*NET occupation code
+onet_name,O*NET occupation name
+naics4,Four-digit NAICS industry code
+naics4_name,Four-digit NAICS industry name
