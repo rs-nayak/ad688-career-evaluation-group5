@@ -237,10 +237,16 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="career-pathway-filter" class="level2">
 <h2 class="anchored" data-anchor-id="career-pathway-filter">Career-Pathway Filter</h2>
-<p>The career pathway is <strong>Data Scientists</strong>.</p>
-<p>The <code>onet_name</code> field was used as the occupation mapping. Records were retained when:</p>
+<p>The career pathway was filtered using the O*NET occupation field:</p>
 <p><code>onet_name = "Data Scientists"</code></p>
-<p>Using the O*NET occupation classification provides a consistent role definition even when individual postings use different job titles, such as Data Scientist, Senior Data Scientist, Machine Learning Engineer, or AI-related titles.</p>
+<p>We chose the O*NET occupation mapping instead of relying only on job-title keywords because employers may use different titles for positions that belong to the same occupation. For example, postings in the filtered dataset include titles such as Data Scientist, Machine Learning Engineer, Senior AI Engineer, and Machine Learning Research Engineer.</p>
+<p>Using the O*NET mapping gives us a more consistent way to identify postings associated with the Data Scientists occupation while still allowing us to examine differences in the actual job titles used by employers.</p>
+<p>The final career and industry filter therefore combines:</p>
+<ul>
+<li><strong>NAICS 5417</strong> — Scientific Research and Development Services</li>
+<li>**O*NET occupation** — Data Scientists</li>
+</ul>
+<p>This keeps the dataset aligned with both the selected industry and career pathway throughout the analysis.</p>
 </section>
 <section id="record-counts" class="level2">
 <h2 class="anchored" data-anchor-id="record-counts">Record Counts</h2>
