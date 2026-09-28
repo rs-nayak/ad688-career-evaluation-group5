@@ -1,3 +1,282 @@
 ---
 title: "Data Preparation"
 ---
+
+## Project Scope
+
+This page documents how the MET Career Compass job-posting data was filtered and cleaned to create the analytical dataset used throughout the rest of the project. The analysis focuses on one career pathway and one industry so that the results remain aligned with the project's product question.
+
+| **Element** | **Selection** |
+|---|---|
+| Industry | Scientific Research and Development Services |
+| NAICS code | 5417 |
+| Career pathway | Data Scientists |
+| Date window | January 6, 2026–August 23, 2026 |
+| Final panel size | 760 postings |
+
+Our product question focuses on identifying the skills most in demand for Data Scientists within Scientific Research and Development Services.
+
+## Data Source
+
+The analysis uses the MET Career Compass 2026 job-posting dataset supplied in Parquet format.
+
+The source contains posting-level information on job titles, employers, salary, location, work arrangement, experience, education, skills, occupation, and industry.
+
+The raw Parquet files are processed using PySpark. The final cleaned analytical dataset is exported as:
+
+`output/career_market_panel.csv`
+
+A corresponding data dictionary is exported as:
+
+`output/data_dictionary.csv`
+
+## Industry Filter
+
+The analysis is restricted to **NAICS 5417 — Scientific Research and Development Services**.
+
+The four-digit `naics4` field was used to identify postings belonging to this industry. Restricting the analysis to a single NAICS code keeps the project focused on the Data Scientist labor market within the selected industry rather than the overall labor market.
+
+## Career-Pathway Filter
+
+The career pathway is **Data Scientists**.
+
+The `onet_name` field was used as the occupation mapping. Records were retained when:
+
+`onet_name = "Data Scientists"`
+
+Using the O*NET occupation classification provides a consistent role definition even when individual postings use different job titles, such as Data Scientist, Senior Data Scientist, Machine Learning Engineer, or AI-related titles.
+
+## Record Counts
+
+The initial NAICS 5417 and Data Scientists filter produced **1,120 postings**.
+
+Potential duplicate advertisements were then removed using posting-level characteristics rather than the source ID alone.
+
+| **Step** | **Postings** |
+|---|---:|
+| Initial NAICS 5417 + Data Scientists filter | 1,120 |
+| After duplicate removal | 930 |
+| Final 2026 analytical panel | 760 |
+
+A total of **190 duplicate records** were removed before the final date window was applied.
+
+## Date Window
+
+The final analysis is restricted to postings from **2026**.
+
+The earliest posting in the final panel is:
+
+`2026-01-06`
+
+The latest posting is:
+
+`2026-08-23`
+
+Restricting the dataset to 2026 provides a current-period view of the selected labor market and prevents older postings from being mixed with the current market baseline.
+
+## Cleaning Decisions
+
+### Duplicate Records
+
+Unique source IDs did not necessarily represent unique job advertisements. We therefore identified potential duplicates using exact matches on:
+
+- Job title
+- Employer
+- Location
+- Posting date
+- Lower salary bound
+- Upper salary bound
+
+Using this posting-level definition reduced the dataset from **1,120 to 930 records**, removing **190 duplicate postings**.
+
+Records with differences in these attributes were retained because they could represent distinct opportunities.
+
+### Missing Values
+
+Missing information appeared in several forms, including null values, blank strings, empty arrays, and text values such as `"null"`, `"none"`, `"n/a"`, `"na"`, and `"unknown"`.
+
+These values were standardized during cleaning.
+
+We generally did not delete an entire posting because one field was missing. Instead, missing categorical information was retained as **Unknown** or **Not specified** where appropriate.
+
+This approach preserves usable information from the rest of the posting while keeping data-quality limitations visible.
+
+### Salary
+
+Salary required several cleaning steps.
+
+The original salary fields were first converted safely to numeric values. Invalid text values were converted to missing values rather than causing conversion errors.
+
+Reported pay was then standardized to an annual basis:
+
+- Annual salaries were retained as reported.
+- Monthly salaries were multiplied by 12.
+- Hourly salaries were multiplied by 2,080 hours.
+- Salaries with unsupported or unknown pay periods were not annualized.
+
+Three analytical salary variables were created:
+
+- `annual_salary_from`
+- `annual_salary_to`
+- `annual_salary_midpoint`
+
+Salary ranges were also classified according to whether they were valid, partial, missing, or invalid.
+
+Missing salary values were **not imputed**.
+
+Potential extreme values were identified using the interquartile range (IQR) method and stored in the `salary_outlier` field. These observations were flagged rather than automatically deleted from the final analytical dataset.
+
+In the final 2026 panel:
+
+| **Salary Measure** | **Result** |
+|---|---:|
+| Postings with usable salary | 240 |
+| Share of panel | 31.6% |
+| Mean annual salary midpoint | $195,417 |
+| Potential outliers flagged | 3 |
+
+Salary findings therefore describe the subset of postings that disclose usable compensation rather than every posting in the market.
+
+### Experience Requirements
+
+Minimum and maximum years of experience were converted to numeric values where available.
+
+A standardized experience category was created using the minimum reported experience:
+
+- 0 years minimum
+- 1–2 years
+- 3–5 years
+- 6–10 years
+- 10+ years
+- Not specified
+
+Missing experience information was classified as **Not specified** rather than assumed to mean zero years.
+
+This distinction is important because a missing experience requirement does not necessarily mean that an employer requires no previous experience.
+
+### Education Requirements
+
+Education information was converted into an array structure so that postings containing multiple education levels could be represented consistently.
+
+Missing education requirements were retained rather than inferred or imputed.
+
+### Skill Fields
+
+The dataset contains several types of skill information. These fields were converted into arrays so that individual skills could be separated and counted across postings.
+
+The final dataset retains:
+
+- Overall skills
+- Specialized skills
+- Common skills
+- Software skills
+- Certifications
+
+Skills information is available for **733 of the 760 final postings**, giving approximately **96.4% coverage**.
+
+The array structure allows the market analysis to identify how frequently individual skills such as Python, Machine Learning, SQL, and TensorFlow appear across postings.
+
+### Remote and Onsite Indicators
+
+Work-arrangement labels were standardized into four categories:
+
+- Remote
+- Hybrid
+- Onsite
+- Unknown
+
+Text containing variations of remote, hybrid, or onsite was mapped to the appropriate standardized category.
+
+Missing or unrecognized information was classified as **Unknown**. Unknown was not assumed to mean onsite.
+
+In the final dataset:
+
+| **Work Arrangement** | **Postings** |
+|---|---:|
+| Unknown | 389 |
+| Hybrid | 170 |
+| Remote | 150 |
+| Onsite | 51 |
+
+Because work arrangement is unknown for a substantial portion of the dataset, comparisons between remote, hybrid, and onsite work should be interpreted with this limitation in mind.
+
+### Location Fields
+
+City and state fields contained missing values and inconsistent labels.
+
+Unavailable or unusable locations were standardized as **Unknown** rather than deleting the associated job posting.
+
+Several identifiable formatting inconsistencies were also corrected. For example:
+
+- `Mclean, Virginia, United States` → `McLean`
+- `New York, United States` → `New York`
+
+The cleaned variables `city_clean` and `state_clean` are used for the geographic analysis.
+
+The final dataset contains **264 postings with an unknown state** and **280 postings with an unknown city**. These records remain in the analytical dataset.
+
+### Industry and Occupation Fields
+
+The final dataset retains both the O*NET occupation fields and the four-digit NAICS fields:
+
+- `onet`
+- `onet_name`
+- `naics4`
+- `naics4_name`
+
+These fields ensure that the analysis remains anchored to the selected **Data Scientists** occupation and **NAICS 5417** industry throughout the project.
+
+### Inconsistent Labels
+
+Categorical fields were standardized where a clear correction could be made without introducing unsupported assumptions.
+
+For example, work-arrangement variations were grouped into Remote, Hybrid, Onsite, and Unknown, while known city formatting inconsistencies were corrected.
+
+When the correct value could not be determined confidently, the record was classified as Unknown rather than guessing a replacement.
+
+## Data Coverage
+
+Coverage varies substantially across the analytical variables.
+
+| **Field** | **Available** | **Missing / Unknown** | **Coverage** |
+|---|---:|---:|---:|
+| Total postings | 760 | — | 100% |
+| Skills | 733 | 27 | 96.4% |
+| Salary | 240 | 520 | 31.6% |
+| State | 496 | 264 | 65.3% |
+| City | 480 | 280 | 63.2% |
+| Known work arrangement | 371 | 389 | 48.8% |
+
+Skills have strong coverage, while salary, location, and work-arrangement information are less complete.
+
+For this reason, analyses involving these variables use their available observations and explicitly report the missing or Unknown category rather than treating missing values as observed information.
+
+## Analytical Limitations
+
+Several limitations carry into the market analysis.
+
+**Salary coverage is limited.** Only 240 of 760 postings contain usable salary information. Salary statistics therefore describe salary-reporting postings rather than the complete market.
+
+**Location information is incomplete.** State information is unknown for 264 postings and city information is unknown for 280 postings. Geographic results describe where postings with identifiable locations are concentrated.
+
+**Work arrangement is frequently unknown.** Remote, hybrid, or onsite status could be identified for 371 postings, while 389 remain Unknown.
+
+**Experience information is incomplete.** A large number of postings do not specify an experience requirement. Missing experience was therefore kept separate from postings reporting a zero-year minimum.
+
+**The dataset represents observed postings rather than the entire labor market.** The findings describe the postings contained in the MET Career Compass dataset within the selected career, industry, and date window and should not be interpreted as a complete census of all Data Scientist opportunities.
+
+## Output
+
+After filtering, duplicate removal, cleaning, and application of the final date window, the analytical panel contains:
+
+**760 postings and 27 variables**
+
+The cleaned dataset is saved as:
+
+`output/career_market_panel.csv`
+
+The accompanying data dictionary is saved as:
+
+`output/data_dictionary.csv`
+
+These files are used for the Market Baseline analysis and will support the later Skill Gap Analysis and Career Evaluation stages of the project.

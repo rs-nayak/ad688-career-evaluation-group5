@@ -2,20 +2,48 @@
 title: "AD688 O1 Fall '26 Career Evaluation Team Project - Group 5"
 ---
 
+## Project Overview
+
+This project evaluates career opportunities for **Data Scientists** within the **Scientific Research and Development Services industry (NAICS 5417)** using labor-market data from the MET Career Compass dataset.
+
+Our analysis focuses on understanding the current Data Scientist job market within this industry, including employer demand, salary patterns, geographic distribution, experience requirements, work arrangements, and the skills most frequently requested by employers.
+
 ## Project Scope
 
-Our project focuses on career opportunities within the Animal Food Manufacturing industry (NAICS 3111).
+| **Element** | **Selection** |
+|---|---|
+| Industry | Scientific Research and Development Services |
+| NAICS Code | 5417 |
+| Career Pathway | Data Scientists |
+| Analysis Period | 2026 |
+| Product Focus | Skills Most in Demand |
 
-The project will use labor-market and employability data to evaluate career opportunities within the Data Science field, skill requirements, and potential skill gaps within this industry.
+The project is designed to answer the following product question:
 
-## Project Team (Group 5 Members)
+> **What skills are most in demand for Data Scientists within Scientific Research and Development Services (NAICS 5417)?**
 
-- Richa Nayak 
-- Benjamin Nagle 
-- James Lillis 
+The findings will be used to identify important technical and professional skills and provide a foundation for evaluating potential skill gaps and career preparation.
+
+## Project Team
+
+**Group 5 Members**
+
+- Richa Nayak
+- Benjamin Nagle
+- James Lillis
 - Victoria Loukas
 
-## Industry Selection & Career Pathway
-- Industry: Animal Food Manufacturing 
-- NAICS Code: 3111
-- Career Pathway: Data Science
+## Project Analysis
+
+The project is organized into several stages:
+
+- **Introduction** — defines the target user, product question, industry scope, rationale, and supporting literature.
+- **Data Preparation** — documents filtering, data cleaning, missing values, duplicate handling, and creation of the final analytical dataset.
+- **Market Baseline** — examines job demand, employers, salary, geography, experience requirements, work arrangements, and skills in demand.
+- **Skill Gap Analysis** — compares labor-market skill demand with relevant candidate skills.
+- **Career Evaluation** — evaluates the attractiveness and attainability of the selected career pathway.
+- **Final Recommendations** — summarizes the findings and provides recommendations based on the analysis.
+
+## Data Source
+
+The analysis uses the **MET Career Compass 2026 job-posting dataset**. The final analytical dataset is restricted to Data Scientist postings within NAICS 5417 and is used throughout the project's market and skills analyses.
