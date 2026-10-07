@@ -1,6 +1,5 @@
 project:
   type: website
-  output-dir: docs   # only if you publish from /docs; skip if you use gh-pages/Actions
 
 execute:
   freeze: auto
@@ -35,6 +34,3 @@ format:
     toc: true
 
 bibliography: references.bib
-
-
-

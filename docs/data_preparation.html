@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Preparation – AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-66b905eaf8fd7b3c0ab794c947ff3da0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./introduction.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./data_preparation.html" aria-current="page"> 
+<span class="menu-text">Data Preparation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./market_baseline.html"> 
+<span class="menu-text">Market Baseline</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eda.html"> 
+<span class="menu-text">Exploratory Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./skill_gap_analysis.html"> 
+<span class="menu-text">Skill Gap Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./ml_methods.html"> 
+<span class="menu-text">Predictive Modeling</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./career_evaluation.html"> 
+<span class="menu-text">Career Evaluation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./final_recommendations.html"> 
+<span class="menu-text">Final Recommendations</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#project-scope" id="toc-project-scope" class="nav-link active" data-scroll-target="#project-scope">Project Scope</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
+  <li><a href="#industry-filter" id="toc-industry-filter" class="nav-link" data-scroll-target="#industry-filter">Industry Filter</a></li>
+  <li><a href="#career-pathway-filter" id="toc-career-pathway-filter" class="nav-link" data-scroll-target="#career-pathway-filter">Career-Pathway Filter</a></li>
+  <li><a href="#record-counts" id="toc-record-counts" class="nav-link" data-scroll-target="#record-counts">Record Counts</a></li>
+  <li><a href="#date-window" id="toc-date-window" class="nav-link" data-scroll-target="#date-window">Date Window</a></li>
+  <li><a href="#cleaning-decisions" id="toc-cleaning-decisions" class="nav-link" data-scroll-target="#cleaning-decisions">Cleaning Decisions</a>
+  <ul class="collapse">
+  <li><a href="#duplicate-records" id="toc-duplicate-records" class="nav-link" data-scroll-target="#duplicate-records">Duplicate Records</a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing Values</a></li>
+  <li><a href="#salary" id="toc-salary" class="nav-link" data-scroll-target="#salary">Salary</a></li>
+  <li><a href="#experience-requirements" id="toc-experience-requirements" class="nav-link" data-scroll-target="#experience-requirements">Experience Requirements</a></li>
+  <li><a href="#education-requirements" id="toc-education-requirements" class="nav-link" data-scroll-target="#education-requirements">Education Requirements</a></li>
+  <li><a href="#skill-fields" id="toc-skill-fields" class="nav-link" data-scroll-target="#skill-fields">Skill Fields</a></li>
+  <li><a href="#remote-and-onsite-indicators" id="toc-remote-and-onsite-indicators" class="nav-link" data-scroll-target="#remote-and-onsite-indicators">Remote and Onsite Indicators</a></li>
+  <li><a href="#location-fields" id="toc-location-fields" class="nav-link" data-scroll-target="#location-fields">Location Fields</a></li>
+  <li><a href="#industry-and-occupation-fields" id="toc-industry-and-occupation-fields" class="nav-link" data-scroll-target="#industry-and-occupation-fields">Industry and Occupation Fields</a></li>
+  <li><a href="#inconsistent-labels" id="toc-inconsistent-labels" class="nav-link" data-scroll-target="#inconsistent-labels">Inconsistent Labels</a></li>
+  </ul></li>
+  <li><a href="#data-coverage" id="toc-data-coverage" class="nav-link" data-scroll-target="#data-coverage">Data Coverage</a></li>
+  <li><a href="#analytical-limitations" id="toc-analytical-limitations" class="nav-link" data-scroll-target="#analytical-limitations">Analytical Limitations</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Preparation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="project-scope" class="level2">
+<h2 class="anchored" data-anchor-id="project-scope">Project Scope</h2>
+<p>This page documents how the MET Career Compass job-posting data was filtered and cleaned to create the analytical dataset used throughout the rest of the project. The analysis focuses on one career pathway and one industry so that the results remain aligned with the project’s product question.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Element</strong></th>
+<th><strong>Selection</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Industry</td>
+<td>Scientific Research and Development Services</td>
+</tr>
+<tr class="even">
+<td>NAICS code</td>
+<td>5417</td>
+</tr>
+<tr class="odd">
+<td>Career pathway</td>
+<td>Data Scientists</td>
+</tr>
+<tr class="even">
+<td>Date window</td>
+<td>January 6, 2026–August 23, 2026</td>
+</tr>
+<tr class="odd">
+<td>Final panel size</td>
+<td>760 postings</td>
+</tr>
+</tbody>
+</table>
+<p>Our product question focuses on identifying the skills most in demand for Data Scientists within Scientific Research and Development Services.</p>
+</section>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>The analysis uses the MET Career Compass 2026 job-posting dataset supplied in Parquet format.</p>
+<p>The source contains posting-level information on job titles, employers, salary, location, work arrangement, experience, education, skills, occupation, and industry.</p>
+<p>The raw Parquet files are processed using PySpark. The final cleaned analytical dataset is exported as:</p>
+<p><code>output/career_market_panel.csv</code></p>
+<p>A corresponding data dictionary is exported as:</p>
+<p><code>output/data_dictionary.csv</code></p>
+</section>
+<section id="industry-filter" class="level2">
+<h2 class="anchored" data-anchor-id="industry-filter">Industry Filter</h2>
+<p>The analysis is restricted to <strong>NAICS 5417 — Scientific Research and Development Services</strong>.</p>
+<p>The four-digit <code>naics4</code> field was used to identify postings belonging to this industry. Restricting the analysis to a single NAICS code keeps the project focused on the Data Scientist labor market within the selected industry rather than the overall labor market.</p>
+</section>
+<section id="career-pathway-filter" class="level2">
+<h2 class="anchored" data-anchor-id="career-pathway-filter">Career-Pathway Filter</h2>
+<p>The career pathway was filtered using the O*NET occupation field:</p>
+<p><code>onet_name = "Data Scientists"</code></p>
+<p>We chose the O*NET occupation mapping instead of relying only on job-title keywords because employers may use different titles for positions that belong to the same occupation. For example, postings in the filtered dataset include titles such as Data Scientist, Machine Learning Engineer, Senior AI Engineer, and Machine Learning Research Engineer.</p>
+<p>Using the O*NET mapping gives us a more consistent way to identify postings associated with the Data Scientists occupation while still allowing us to examine differences in the actual job titles used by employers.</p>
+<p>The final career and industry filter therefore combines:</p>
+<ul>
+<li><strong>NAICS 5417</strong> — Scientific Research and Development Services</li>
+<li><strong>ONET occupation</strong> — Data Scientists</li>
+</ul>
+<p>This keeps the dataset aligned with both the selected industry and career pathway throughout the analysis.</p>
+</section>
+<section id="record-counts" class="level2">
+<h2 class="anchored" data-anchor-id="record-counts">Record Counts</h2>
+<p>The initial NAICS 5417 and Data Scientists filter produced <strong>1,120 postings</strong>.</p>
+<p>Potential duplicate advertisements were then removed using posting-level characteristics rather than the source ID alone.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Step</strong></th>
+<th style="text-align: right;"><strong>Postings</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Initial NAICS 5417 + Data Scientists filter</td>
+<td style="text-align: right;">1,120</td>
+</tr>
+<tr class="even">
+<td>After duplicate removal</td>
+<td style="text-align: right;">930</td>
+</tr>
+<tr class="odd">
+<td>Final 2026 analytical panel</td>
+<td style="text-align: right;">760</td>
+</tr>
+</tbody>
+</table>
+<p>A total of <strong>190 duplicate records</strong> were removed before the final date window was applied.</p>
+</section>
+<section id="date-window" class="level2">
+<h2 class="anchored" data-anchor-id="date-window">Date Window</h2>
+<p>The final analysis is restricted to postings from <strong>2026</strong>.</p>
+<p>The earliest posting in the final panel is:</p>
+<p><code>2026-01-06</code></p>
+<p>The latest posting is:</p>
+<p><code>2026-08-23</code></p>
+<p>Restricting the dataset to 2026 provides a current-period view of the selected labor market and prevents older postings from being mixed with the current market baseline.</p>
+</section>
+<section id="cleaning-decisions" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-decisions">Cleaning Decisions</h2>
+<section id="duplicate-records" class="level3">
+<h3 class="anchored" data-anchor-id="duplicate-records">Duplicate Records</h3>
+<p>Unique source IDs did not necessarily represent unique job advertisements. We therefore identified potential duplicates using exact matches on:</p>
+<ul>
+<li>Job title</li>
+<li>Employer</li>
+<li>Location</li>
+<li>Posting date</li>
+<li>Lower salary bound</li>
+<li>Upper salary bound</li>
+</ul>
+<p>Using this posting-level definition reduced the dataset from <strong>1,120 to 930 records</strong>, removing <strong>190 duplicate postings</strong>.</p>
+<p>Records with differences in these attributes were retained because they could represent distinct opportunities.</p>
+</section>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing Values</h3>
+<p>Missing information appeared in several forms, including null values, blank strings, empty arrays, and text values such as <code>"null"</code>, <code>"none"</code>, <code>"n/a"</code>, <code>"na"</code>, and <code>"unknown"</code>.</p>
+<p>These values were standardized during cleaning.</p>
+<p>We generally did not delete an entire posting because one field was missing. Instead, missing categorical information was retained as <strong>Unknown</strong> or <strong>Not specified</strong> where appropriate.</p>
+<p>This approach preserves usable information from the rest of the posting while keeping data-quality limitations visible.</p>
+</section>
+<section id="salary" class="level3">
+<h3 class="anchored" data-anchor-id="salary">Salary</h3>
+<p>Salary required several cleaning steps.</p>
+<p>The original salary fields were first converted safely to numeric values. Invalid text values were converted to missing values rather than causing conversion errors.</p>
+<p>Reported pay was then standardized to an annual basis:</p>
+<ul>
+<li>Annual salaries were retained as reported.</li>
+<li>Monthly salaries were multiplied by 12.</li>
+<li>Hourly salaries were multiplied by 2,080 hours.</li>
+<li>Salaries with unsupported or unknown pay periods were not annualized.</li>
+</ul>
+<p>Three analytical salary variables were created:</p>
+<ul>
+<li><code>annual_salary_from</code></li>
+<li><code>annual_salary_to</code></li>
+<li><code>annual_salary_midpoint</code></li>
+</ul>
+<p>Salary ranges were also classified according to whether they were valid, partial, missing, or invalid.</p>
+<p>Missing salary values were <strong>not imputed</strong>.</p>
+<p>Potential extreme values were identified using the interquartile range (IQR) method and stored in the <code>salary_outlier</code> field. These observations were flagged rather than automatically deleted from the final analytical dataset.</p>
+<p>In the final 2026 panel:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Salary Measure</strong></th>
+<th style="text-align: right;"><strong>Result</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Postings with usable salary</td>
+<td style="text-align: right;">240</td>
+</tr>
+<tr class="even">
+<td>Share of panel</td>
+<td style="text-align: right;">31.6%</td>
+</tr>
+<tr class="odd">
+<td>Mean annual salary midpoint</td>
+<td style="text-align: right;">$195,417</td>
+</tr>
+<tr class="even">
+<td>Potential outliers flagged</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+<p>Salary findings therefore describe the subset of postings that disclose usable compensation rather than every posting in the market.</p>
+</section>
+<section id="experience-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="experience-requirements">Experience Requirements</h3>
+<p>Minimum and maximum years of experience were converted to numeric values where available.</p>
+<p>A standardized experience category was created using the minimum reported experience:</p>
+<ul>
+<li>0 years minimum</li>
+<li>1–2 years</li>
+<li>3–5 years</li>
+<li>6–10 years</li>
+<li>10+ years</li>
+<li>Not specified</li>
+</ul>
+<p>Missing experience information was classified as <strong>Not specified</strong> rather than assumed to mean zero years.</p>
+<p>This distinction is important because a missing experience requirement does not necessarily mean that an employer requires no previous experience.</p>
+</section>
+<section id="education-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="education-requirements">Education Requirements</h3>
+<p>Education information was converted into an array structure so that postings containing multiple education levels could be represented consistently.</p>
+<p>Missing education requirements were retained rather than inferred or imputed.</p>
+</section>
+<section id="skill-fields" class="level3">
+<h3 class="anchored" data-anchor-id="skill-fields">Skill Fields</h3>
+<p>The dataset contains several types of skill information. These fields were converted into arrays so that individual skills could be separated and counted across postings.</p>
+<p>The final dataset retains:</p>
+<ul>
+<li>Overall skills</li>
+<li>Specialized skills</li>
+<li>Common skills</li>
+<li>Software skills</li>
+<li>Certifications</li>
+</ul>
+<p>Skills information is available for <strong>733 of the 760 final postings</strong>, giving approximately <strong>96.4% coverage</strong>.</p>
+<p>The array structure allows the market analysis to identify how frequently individual skills such as Python, Machine Learning, SQL, and TensorFlow appear across postings.</p>
+</section>
+<section id="remote-and-onsite-indicators" class="level3">
+<h3 class="anchored" data-anchor-id="remote-and-onsite-indicators">Remote and Onsite Indicators</h3>
+<p>Work-arrangement labels were standardized into four categories:</p>
+<ul>
+<li>Remote</li>
+<li>Hybrid</li>
+<li>Onsite</li>
+<li>Unknown</li>
+</ul>
+<p>Text containing variations of remote, hybrid, or onsite was mapped to the appropriate standardized category.</p>
+<p>Missing or unrecognized information was classified as <strong>Unknown</strong>. Unknown was not assumed to mean onsite.</p>
+<p>In the final dataset:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Work Arrangement</strong></th>
+<th style="text-align: right;"><strong>Postings</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unknown</td>
+<td style="text-align: right;">389</td>
+</tr>
+<tr class="even">
+<td>Hybrid</td>
+<td style="text-align: right;">170</td>
+</tr>
+<tr class="odd">
+<td>Remote</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="even">
+<td>Onsite</td>
+<td style="text-align: right;">51</td>
+</tr>
+</tbody>
+</table>
+<p>Because work arrangement is unknown for a substantial portion of the dataset, comparisons between remote, hybrid, and onsite work should be interpreted with this limitation in mind.</p>
+</section>
+<section id="location-fields" class="level3">
+<h3 class="anchored" data-anchor-id="location-fields">Location Fields</h3>
+<p>City and state fields contained missing values and inconsistent labels.</p>
+<p>Unavailable or unusable locations were standardized as <strong>Unknown</strong> rather than deleting the associated job posting.</p>
+<p>Several identifiable formatting inconsistencies were also corrected. For example:</p>
+<ul>
+<li><code>Mclean, Virginia, United States</code> → <code>McLean</code></li>
+<li><code>New York, United States</code> → <code>New York</code></li>
+</ul>
+<p>The cleaned variables <code>city_clean</code> and <code>state_clean</code> are used for the geographic analysis.</p>
+<p>The final dataset contains <strong>264 postings with an unknown state</strong> and <strong>280 postings with an unknown city</strong>. These records remain in the analytical dataset.</p>
+</section>
+<section id="industry-and-occupation-fields" class="level3">
+<h3 class="anchored" data-anchor-id="industry-and-occupation-fields">Industry and Occupation Fields</h3>
+<p>The final dataset retains both the O*NET occupation fields and the four-digit NAICS fields:</p>
+<ul>
+<li><code>onet</code></li>
+<li><code>onet_name</code></li>
+<li><code>naics4</code></li>
+<li><code>naics4_name</code></li>
+</ul>
+<p>These fields ensure that the analysis remains anchored to the selected <strong>Data Scientists</strong> occupation and <strong>NAICS 5417</strong> industry throughout the project.</p>
+</section>
+<section id="inconsistent-labels" class="level3">
+<h3 class="anchored" data-anchor-id="inconsistent-labels">Inconsistent Labels</h3>
+<p>Categorical fields were standardized where a clear correction could be made without introducing unsupported assumptions.</p>
+<p>For example, work-arrangement variations were grouped into Remote, Hybrid, Onsite, and Unknown, while known city formatting inconsistencies were corrected.</p>
+<p>When the correct value could not be determined confidently, the record was classified as Unknown rather than guessing a replacement.</p>
+</section>
+</section>
+<section id="data-coverage" class="level2">
+<h2 class="anchored" data-anchor-id="data-coverage">Data Coverage</h2>
+<p>Coverage varies substantially across the analytical variables.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Field</strong></th>
+<th style="text-align: right;"><strong>Available</strong></th>
+<th style="text-align: right;"><strong>Missing / Unknown</strong></th>
+<th style="text-align: right;"><strong>Coverage</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total postings</td>
+<td style="text-align: right;">760</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr class="even">
+<td>Skills</td>
+<td style="text-align: right;">733</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">96.4%</td>
+</tr>
+<tr class="odd">
+<td>Salary</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">520</td>
+<td style="text-align: right;">31.6%</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">264</td>
+<td style="text-align: right;">65.3%</td>
+</tr>
+<tr class="odd">
+<td>City</td>
+<td style="text-align: right;">480</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">63.2%</td>
+</tr>
+<tr class="even">
+<td>Known work arrangement</td>
+<td style="text-align: right;">371</td>
+<td style="text-align: right;">389</td>
+<td style="text-align: right;">48.8%</td>
+</tr>
+</tbody>
+</table>
+<p>Skills have strong coverage, while salary, location, and work-arrangement information are less complete.</p>
+<p>For this reason, analyses involving these variables use their available observations and explicitly report the missing or Unknown category rather than treating missing values as observed information.</p>
+</section>
+<section id="analytical-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="analytical-limitations">Analytical Limitations</h2>
+<p>Several limitations carry into the market analysis.</p>
+<p><strong>Salary coverage is limited.</strong> Only 240 of 760 postings contain usable salary information. Salary statistics therefore describe salary-reporting postings rather than the complete market.</p>
+<p><strong>Location information is incomplete.</strong> State information is unknown for 264 postings and city information is unknown for 280 postings. Geographic results describe where postings with identifiable locations are concentrated.</p>
+<p><strong>Work arrangement is frequently unknown.</strong> Remote, hybrid, or onsite status could be identified for 371 postings, while 389 remain Unknown.</p>
+<p><strong>Experience information is incomplete.</strong> A large number of postings do not specify an experience requirement. Missing experience was therefore kept separate from postings reporting a zero-year minimum.</p>
+<p><strong>The dataset represents observed postings rather than the entire labor market.</strong> The findings describe the postings contained in the MET Career Compass (Jobs 2026) dataset provided for the class within the selected career, industry, and date window. This should not be interpreted as a complete census of all Data Scientist opportunities.</p>
+</section>
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<p>After filtering, duplicate removal, cleaning, and application of the final date window, the analytical panel contains:</p>
+<p><strong>760 postings and 27 variables</strong></p>
+<p>The cleaned dataset is saved as:</p>
+<p><code>output/career_market_panel.csv</code></p>
+<p>The accompanying data dictionary is saved as:</p>
+<p><code>output/data_dictionary.csv</code></p>
+<p>These files are used for the Market Baseline analysis and will support the later Skill Gap Analysis and Career Evaluation stages of the project.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
