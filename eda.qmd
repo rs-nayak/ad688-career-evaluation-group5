@@ -1,5 +1,4 @@
 ---
-import theme  # applies the "course" Plotly template
 title: "Exploratory Data Analysis"
 jupyter: python3
 ---
@@ -7,31 +6,38 @@ jupyter: python3
 ## Setup
 
 ```{python}
-import json
 import pandas as pd
 import plotly.express as px
-import theme
+from IPython.display import Markdown, display
+import theme  # applies the "course" Plotly template
+
+DATA_FILE = "data/jobs.csv"  # change if your cleaned dataset has a different name
 
 cols = ["POSTED", "SALARY", "STATE_NAME", "TITLE_NAME", "SKILLS_NAME",
         "SOFTWARE_SKILLS_NAME", "REMOTE_TYPE_NAME", "MIN_YEARS_EXPERIENCE",
         "EMPLOYMENT_TYPE_NAME"]
-df = pd.read_csv("data/jobs.csv", usecols=cols, low_memory=False)
+df = pd.read_csv(DATA_FILE, usecols=cols, low_memory=False)
 df["POSTED"] = pd.to_datetime(df["POSTED"], errors="coerce")
 df["MONTH"] = df["POSTED"].dt.to_period("M").astype(str)
-print(df.shape)
+print(f"{len(df):,} postings loaded")
 ```
 
 ## Job Postings Over Time
 
 ```{python}
-monthly = df["MONTH"].value_counts().sort_index().reset_index()
+monthly = (df.dropna(subset=["POSTED"])["MONTH"]
+           .value_counts().sort_index().reset_index())
 monthly.columns = ["Month", "Postings"]
-fig = px.bar(monthly, x="Month", y="Postings",
-             title="Business Intelligence Analyst Postings by Month (2024)")
+fig = px.bar(monthly, x="Month", y="Postings", title="Job Postings by Month")
 fig.show()
-```
 
-*Interpretation: (write 2-3 sentences: which months are highest or lowest, and why that might be.)*
+hi = monthly.loc[monthly["Postings"].idxmax()]
+lo = monthly.loc[monthly["Postings"].idxmin()]
+display(Markdown(
+    f"*Interpretation: postings peak in **{hi['Month']}** ({hi['Postings']:,}) "
+    f"and are lowest in **{lo['Month']}** ({lo['Postings']:,}). "
+    f"Hiring activity is not constant across the period covered.*"))
+```
 
 ## Most Common Job Titles
 
@@ -41,9 +47,12 @@ titles.columns = ["Title", "Postings"]
 fig = px.bar(titles.sort_values("Postings"), x="Postings", y="Title",
              orientation="h", title="Top 10 Job Titles")
 fig.show()
-```
 
-*Interpretation: (what do the titles say about how employers label this role?)*
+display(Markdown(
+    f"*Interpretation: the most common title is **{titles.iloc[0]['Title']}** "
+    f"({titles.iloc[0]['Postings']:,} postings). The rest of the top 10 shows "
+    f"that employers label this role in several different ways.*"))
+```
 
 ## Salary Trends
 
@@ -51,7 +60,8 @@ Only postings that list a salary are included below.
 
 ```{python}
 sal = df.dropna(subset=["SALARY"])
-print(f"{len(sal):,} of {len(df):,} postings list a salary ({len(sal)/len(df):.1%})")
+share_listed = len(sal) / len(df)
+print(f"{len(sal):,} of {len(df):,} postings list a salary ({share_listed:.1%})")
 sal["SALARY"].describe().round(0)
 ```
 
@@ -66,9 +76,15 @@ fig.show()
 fig = px.box(sal, x="MONTH", y="SALARY", title="Salary by Posting Month")
 fig.update_yaxes(title="Annual salary (USD)")
 fig.show()
-```
 
-*Interpretation: (center, spread, outliers, and whether pay changes by month. Mention that 57% of postings have no salary, so these results may not represent all postings.)*
+display(Markdown(
+    f"*Interpretation: the median listed salary is **${sal['SALARY'].median():,.0f}**, "
+    f"with a middle 50% range of ${sal['SALARY'].quantile(0.25):,.0f} to "
+    f"${sal['SALARY'].quantile(0.75):,.0f}. The maximum is "
+    f"${sal['SALARY'].max():,.0f}, so outliers are present. Only "
+    f"{share_listed:.1%} of postings list a salary, so these results may not "
+    f"represent all postings.*"))
+```
 
 ### Salary by Experience Required
 
@@ -81,9 +97,13 @@ fig = px.box(exp, x="Experience", y="SALARY",
              title="Salary by Minimum Years of Experience")
 fig.update_yaxes(title="Annual salary (USD)")
 fig.show()
-```
 
-*Interpretation: (how much does pay rise with experience?)*
+med = exp.groupby("Experience", observed=True)["SALARY"].median()
+display(Markdown(
+    f"*Interpretation: the median salary is ${med.iloc[0]:,.0f} for the "
+    f"**{med.index[0]}** group and ${med.iloc[-1]:,.0f} for the "
+    f"**{med.index[-1]}** group, so pay changes with the experience required.*"))
+```
 
 ## Geographic Variation
 
@@ -96,26 +116,34 @@ fig.show()
 ```
 
 ```{python}
+MIN_N = 100 if len(sal) > 5000 else 5   # smaller datasets need a lower cutoff
 state_sal = (sal.groupby("STATE_NAME")["SALARY"]
              .agg(["median", "count"]).reset_index())
-state_sal = state_sal[state_sal["count"] >= 100].sort_values("median", ascending=False).head(15)
+state_sal = state_sal[state_sal["count"] >= MIN_N].sort_values("median", ascending=False).head(15)
 fig = px.bar(state_sal.sort_values("median"), x="median", y="STATE_NAME",
              orientation="h",
-             title="Median Salary by State (states with 100+ salary postings)")
+             title=f"Median Salary by State (states with {MIN_N}+ salary postings)")
 fig.update_xaxes(title="Median annual salary (USD)")
 fig.update_yaxes(title="")
 fig.show()
-```
 
-*Interpretation: (do the states with the most postings also pay the most?)*
+top_post = states.iloc[0]["State"]
+top_pay = state_sal.iloc[0]["STATE_NAME"]
+display(Markdown(
+    f"*Interpretation: **{top_post}** has the most postings, while **{top_pay}** "
+    f"has the highest median salary among states with enough salary data. "
+    f"{'These are the same state.' if top_post == top_pay else 'The state with the most postings is not the one that pays the most.'}*"))
+```
 
 ## Remote Work
 
 ```{python}
-remote = df["REMOTE_TYPE_NAME"].value_counts().reset_index()
+remote = df["REMOTE_TYPE_NAME"].fillna("Unknown").value_counts().reset_index()
 remote.columns = ["Type", "Postings"]
 fig = px.pie(remote, names="Type", values="Postings", title="Remote vs. On-site Postings")
 fig.show()
-```
 
-*Interpretation: (how common is remote work in this role?)*
+display(Markdown(
+    f"*Interpretation: **{remote.iloc[0]['Type']}** is the largest category, "
+    f"at {remote.iloc[0]['Postings'] / remote['Postings'].sum():.1%} of postings.*"))
+```
