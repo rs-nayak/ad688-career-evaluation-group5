@@ -1,0 +1,121 @@
+---
+import theme  # applies the "course" Plotly template
+title: "Exploratory Data Analysis"
+jupyter: python3
+---
+
+## Setup
+
+```{python}
+import json
+import pandas as pd
+import plotly.express as px
+import theme
+
+cols = ["POSTED", "SALARY", "STATE_NAME", "TITLE_NAME", "SKILLS_NAME",
+        "SOFTWARE_SKILLS_NAME", "REMOTE_TYPE_NAME", "MIN_YEARS_EXPERIENCE",
+        "EMPLOYMENT_TYPE_NAME"]
+df = pd.read_csv("data/jobs.csv", usecols=cols, low_memory=False)
+df["POSTED"] = pd.to_datetime(df["POSTED"], errors="coerce")
+df["MONTH"] = df["POSTED"].dt.to_period("M").astype(str)
+print(df.shape)
+```
+
+## Job Postings Over Time
+
+```{python}
+monthly = df["MONTH"].value_counts().sort_index().reset_index()
+monthly.columns = ["Month", "Postings"]
+fig = px.bar(monthly, x="Month", y="Postings",
+             title="Business Intelligence Analyst Postings by Month (2024)")
+fig.show()
+```
+
+*Interpretation: (write 2-3 sentences: which months are highest or lowest, and why that might be.)*
+
+## Most Common Job Titles
+
+```{python}
+titles = df["TITLE_NAME"].value_counts().head(10).reset_index()
+titles.columns = ["Title", "Postings"]
+fig = px.bar(titles.sort_values("Postings"), x="Postings", y="Title",
+             orientation="h", title="Top 10 Job Titles")
+fig.show()
+```
+
+*Interpretation: (what do the titles say about how employers label this role?)*
+
+## Salary Trends
+
+Only postings that list a salary are included below.
+
+```{python}
+sal = df.dropna(subset=["SALARY"])
+print(f"{len(sal):,} of {len(df):,} postings list a salary ({len(sal)/len(df):.1%})")
+sal["SALARY"].describe().round(0)
+```
+
+```{python}
+fig = px.histogram(sal, x="SALARY", nbins=50,
+                   title="Salary Distribution (postings with listed pay)")
+fig.update_xaxes(title="Annual salary (USD)")
+fig.show()
+```
+
+```{python}
+fig = px.box(sal, x="MONTH", y="SALARY", title="Salary by Posting Month")
+fig.update_yaxes(title="Annual salary (USD)")
+fig.show()
+```
+
+*Interpretation: (center, spread, outliers, and whether pay changes by month. Mention that 57% of postings have no salary, so these results may not represent all postings.)*
+
+### Salary by Experience Required
+
+```{python}
+exp = sal.dropna(subset=["MIN_YEARS_EXPERIENCE"]).copy()
+exp["Experience"] = pd.cut(exp["MIN_YEARS_EXPERIENCE"],
+                           bins=[-1, 1, 3, 5, 8, 50],
+                           labels=["0-1 yrs", "2-3 yrs", "4-5 yrs", "6-8 yrs", "9+ yrs"])
+fig = px.box(exp, x="Experience", y="SALARY",
+             title="Salary by Minimum Years of Experience")
+fig.update_yaxes(title="Annual salary (USD)")
+fig.show()
+```
+
+*Interpretation: (how much does pay rise with experience?)*
+
+## Geographic Variation
+
+```{python}
+states = df["STATE_NAME"].value_counts().head(15).reset_index()
+states.columns = ["State", "Postings"]
+fig = px.bar(states.sort_values("Postings"), x="Postings", y="State",
+             orientation="h", title="Top 15 States by Number of Postings")
+fig.show()
+```
+
+```{python}
+state_sal = (sal.groupby("STATE_NAME")["SALARY"]
+             .agg(["median", "count"]).reset_index())
+state_sal = state_sal[state_sal["count"] >= 100].sort_values("median", ascending=False).head(15)
+fig = px.bar(state_sal.sort_values("median"), x="median", y="STATE_NAME",
+             orientation="h",
+             title="Median Salary by State (states with 100+ salary postings)")
+fig.update_xaxes(title="Median annual salary (USD)")
+fig.update_yaxes(title="")
+fig.show()
+```
+
+*Interpretation: (do the states with the most postings also pay the most?)*
+
+## Remote Work
+
+```{python}
+remote = df["REMOTE_TYPE_NAME"].value_counts().reset_index()
+remote.columns = ["Type", "Postings"]
+fig = px.pie(remote, names="Type", values="Postings", title="Remote vs. On-site Postings")
+fig.show()
+```
+
+*Interpretation: (how common is remote work in this role?)*

@@ -26,10 +26,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -45,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7c0f67eba7e864f644f943ef9a6fd48f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-66b905eaf8fd7b3c0ab794c947ff3da0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,6 +108,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
@@ -112,8 +150,16 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Market Baseline</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./eda.html"> 
+<span class="menu-text">Exploratory Analysis</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link active" href="./skill_gap_analysis.html" aria-current="page"> 
 <span class="menu-text">Skill Gap Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./ml_methods.qmd"> 
+<span class="menu-text">Predictive Modeling</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./career_evaluation.html"> 
@@ -134,8 +180,20 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#team-skills-vs.-market-demand-2024-postings" id="toc-team-skills-vs.-market-demand-2024-postings" class="nav-link active" data-scroll-target="#team-skills-vs.-market-demand-2024-postings">Team Skills vs.&nbsp;Market Demand (2024 Postings)</a>
+  <ul class="collapse">
+  <li><a href="#market-demand-from-job-postings" id="toc-market-demand-from-job-postings" class="nav-link" data-scroll-target="#market-demand-from-job-postings">Market demand from job postings</a></li>
+  <li><a href="#team-skill-levels" id="toc-team-skill-levels" class="nav-link" data-scroll-target="#team-skill-levels">Team skill levels</a></li>
+  <li><a href="#skill-gaps" id="toc-skill-gaps" class="nav-link" data-scroll-target="#skill-gaps">Skill gaps</a></li>
+  <li><a href="#improvement-plan" id="toc-improvement-plan" class="nav-link" data-scroll-target="#improvement-plan">Improvement plan</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -159,8 +217,289 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="team-skills-vs.-market-demand-2024-postings" class="level2">
+<h2 class="anchored" data-anchor-id="team-skills-vs.-market-demand-2024-postings">Team Skills vs.&nbsp;Market Demand (2024 Postings)</h2>
+<section id="market-demand-from-job-postings" class="level3">
+<h3 class="anchored" data-anchor-id="market-demand-from-job-postings">Market demand from job postings</h3>
+<div id="a00c5b08" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>jobs <span class="op">=</span> pd.read_csv(<span class="st">"data/jobs.csv"</span>, usecols<span class="op">=</span>[<span class="st">"SKILLS_NAME"</span>, <span class="st">"SOFTWARE_SKILLS_NAME"</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                   low_memory<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> (jobs[<span class="st">"SKILLS_NAME"</span>].fillna(<span class="st">""</span>) <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> jobs[<span class="st">"SOFTWARE_SKILLS_NAME"</span>].fillna(<span class="st">""</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># display name -&gt; search pattern in the skills text</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>patterns <span class="op">=</span> {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: <span class="vs">r"</span><span class="dv">\b</span><span class="vs">SQL</span><span class="dv">\b</span><span class="vs">"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: <span class="vs">r"Python"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Tableau"</span>: <span class="vs">r"Tableau"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Power BI"</span>: <span class="vs">r"Power BI"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Excel"</span>: <span class="vs">r"Microsoft Excel"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: <span class="vs">r"Data Visualization"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Analysis"</span>: <span class="vs">r"Data Analysis"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETL"</span>: <span class="vs">r"Extract Transform Load</span><span class="cf">|</span><span class="vs">ETL"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: <span class="vs">r"Statistics</span><span class="cf">|</span><span class="vs">Statistical Analysis"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: <span class="vs">r"Machine Learning"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud (AWS/Azure)"</span>: <span class="vs">r"Amazon Web Services</span><span class="cf">|</span><span class="dv">\b</span><span class="vs">AWS</span><span class="dv">\b</span><span class="cf">|</span><span class="vs">Microsoft Azure"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Communication"</span>: <span class="vs">r"Communication"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>demand <span class="op">=</span> pd.Series({</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    name: text.<span class="bu">str</span>.contains(pat, case<span class="op">=</span><span class="va">False</span>, regex<span class="op">=</span><span class="va">True</span>).mean()</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, pat <span class="kw">in</span> patterns.items()</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>}).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>demand_pct <span class="op">=</span> (demand <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>demand_pct.rename(<span class="st">"</span><span class="sc">% o</span><span class="st">f postings listing skill"</span>).to_frame()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">% of postings listing skill</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Communication</th>
+<td>54.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Data Analysis</th>
+<td>39.6</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">SQL</th>
+<td>32.5</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Excel</th>
+<td>17.7</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Python</th>
+<td>17.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Tableau</th>
+<td>16.3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Power BI</th>
+<td>15.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Statistics</th>
+<td>14.2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<td>11.2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Cloud (AWS/Azure)</th>
+<td>9.7</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">ETL</th>
+<td>8.2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Machine Learning</th>
+<td>6.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="53aca1dd" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span>demand_pct.values, y<span class="op">=</span>demand_pct.index, color<span class="op">=</span><span class="st">"#2C7FB8"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"</span><span class="sc">% o</span><span class="st">f postings listing the skill"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Most In-Demand Skills in Business Intelligence Postings"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skill_gap_analysis_files/figure-html/cell-3-output-1.png" width="765" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="team-skill-levels" class="level3">
+<h3 class="anchored" data-anchor-id="team-skill-levels">Team skill levels</h3>
+<p>Scale: 1 = Beginner, 2 = Basic, 3 = Intermediate, 4 = Advanced, 5 = Expert.</p>
+<div id="2ce4ad4b" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># EDIT: replace names and scores with your real team's</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>team <span class="op">=</span> {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Name"</span>: [<span class="st">"Richa"</span>, <span class="st">"James"</span>, <span class="st">"Ben"</span>, <span class="st">"Victoria"</span>],</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>:                [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>],</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>:             [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>],</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Tableau"</span>:            [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>],</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Power BI"</span>:           [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>],</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Excel"</span>:              [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Analysis"</span>:      [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">3</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ETL"</span>:                [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>:         [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>],</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>:   [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>],</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud (AWS/Azure)"</span>:  [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>],</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Communication"</span>:      [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>df_skills <span class="op">=</span> pd.DataFrame(team).set_index(<span class="st">"Name"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df_skills, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, linewidths<span class="op">=</span><span class="fl">0.5</span>, vmin<span class="op">=</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Team Skill Levels Heatmap"</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skill_gap_analysis_files/figure-html/cell-4-output-1.png" width="860" height="429" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="skill-gaps" class="level3">
+<h3 class="anchored" data-anchor-id="skill-gaps">Skill gaps</h3>
+<p>Required level is scaled from market demand: the most-demanded skill maps to 5, and others scale proportionally. A gap is the required level minus a member’s level (0 if they meet it). This is a relative measure, not an absolute standard of expertise.</p>
+<div id="fab8e594" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>required <span class="op">=</span> (demand <span class="op">/</span> demand.<span class="bu">max</span>() <span class="op">*</span> <span class="dv">5</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gap <span class="op">=</span> (required <span class="op">-</span> df_skills[required.index]).clip(lower<span class="op">=</span><span class="dv">0</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>sns.heatmap(gap, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"Reds"</span>, linewidths<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Skill Gaps vs. Market Demand (higher = bigger gap)"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skill_gap_analysis_files/figure-html/cell-5-output-1.png" width="869" height="429" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="3c7133ae" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team average"</span>: df_skills.mean().<span class="bu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Market-required level"</span>: required.<span class="bu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Average gap"</span>: gap.mean().<span class="bu">round</span>(<span class="dv">1</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}).sort_values(<span class="st">"Average gap"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Team average</th>
+<th data-quarto-table-cell-role="th">Market-required level</th>
+<th data-quarto-table-cell-role="th">Average gap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Communication</th>
+<td>3.8</td>
+<td>5.0</td>
+<td>1.2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Data Analysis</th>
+<td>3.5</td>
+<td>3.7</td>
+<td>0.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">SQL</th>
+<td>3.0</td>
+<td>3.0</td>
+<td>0.2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Power BI</th>
+<td>2.0</td>
+<td>1.4</td>
+<td>0.1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Tableau</th>
+<td>2.0</td>
+<td>1.5</td>
+<td>0.1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Cloud (AWS/Azure)</th>
+<td>1.5</td>
+<td>0.9</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<td>2.8</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">ETL</th>
+<td>1.5</td>
+<td>0.8</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Machine Learning</th>
+<td>2.2</td>
+<td>0.6</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Excel</th>
+<td>3.8</td>
+<td>1.6</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Python</th>
+<td>3.2</td>
+<td>1.6</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Statistics</th>
+<td>3.0</td>
+<td>1.3</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="improvement-plan" class="level3">
+<h3 class="anchored" data-anchor-id="improvement-plan">Improvement plan</h3>
+<p><strong>Priorities per member:</strong> (for each person, name their 2-3 largest gaps from the heatmap)</p>
+<p><strong>Resources:</strong> (courses or tools for each priority skill, such as Tableau Public training, DataCamp, Coursera, or official docs)</p>
+<p><strong>Team collaboration:</strong> (for example, pair work, short teaching sessions where the strongest member on a skill teaches the others, and shared practice projects)</p>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -236,7 +575,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/rs-nayak\.github\.io\/ad688-career-evaluation-group5\/");
+        var filterRegex = new RegExp('/' + window.location.host + '/');
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
