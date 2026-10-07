@@ -2,33 +2,39 @@
 jupyter: python3
 title: "Skill Gap Analysis"
 ---
-## Team Skills vs. Market Demand (2024 Postings)
+
+## Team Skills vs. Market Demand (Data Scientist Postings, NAICS 5417)
+
+This page compares our team's self-rated skills with the skills most often requested in the 760 Data Scientist postings from the Market Baseline (January to August 2026).
 
 ### Market demand from job postings
 
 ```{python}
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+import plotly.express as px
+from IPython.display import Markdown, display
+import theme  # applies the "course" Plotly template
 
-jobs = pd.read_csv("data/jobs.csv", usecols=["SKILLS_NAME", "SOFTWARE_SKILLS_NAME"],
-                   low_memory=False)
-text = (jobs["SKILLS_NAME"].fillna("") + " " + jobs["SOFTWARE_SKILLS_NAME"].fillna(""))
+jobs = pd.read_csv("output/career_market_panel.csv")
+
+skill_cols = ["skills_array", "specialized_skills_array",
+              "common_skills_array", "software_skills_array"]
+text = jobs[skill_cols].fillna("").astype(str).agg(" ".join, axis=1)
 
 # display name -> search pattern in the skills text
 patterns = {
-    "SQL": r"\bSQL\b",
     "Python": r"Python",
+    "SQL": r"\bSQL\b",
+    "Machine Learning": r"Machine Learning",
+    "Deep Learning": r"Deep Learning",
+    "TensorFlow": r"TensorFlow",
+    "Data Pipelines": r"Data Pipeline|\bETL\b|Extract Transform Load",
+    "Cloud (AWS/Azure/GCP)": r"Amazon Web Services|\bAWS\b|Azure|Google Cloud|\bGCP\b",
+    "Statistics": r"Statistic",
     "Tableau": r"Tableau",
     "Power BI": r"Power BI",
-    "Excel": r"Microsoft Excel",
-    "Data Visualization": r"Data Visualization",
-    "Data Analysis": r"Data Analysis",
-    "ETL": r"Extract Transform Load|\bETL\b",
-    "Statistics": r"Statistics|Statistical Analysis",
-    "Machine Learning": r"Machine Learning",
-    "Cloud (AWS/Azure)": r"Amazon Web Services|\bAWS\b|Microsoft Azure",
-    "Communication": r"Communication",
+    "Databricks": r"Databricks",
+    "Kubernetes": r"Kubernetes",
 }
 
 demand = pd.Series({
@@ -37,16 +43,17 @@ demand = pd.Series({
 }).sort_values(ascending=False)
 
 demand_pct = (demand * 100).round(1)
+print(f"Share of all {len(jobs)} postings that list each skill")
 demand_pct.rename("% of postings listing skill").to_frame()
 ```
 
 ```{python}
-plt.figure(figsize=(8, 5))
-sns.barplot(x=demand_pct.values, y=demand_pct.index, color="#2C7FB8")
-plt.xlabel("% of postings listing the skill")
-plt.title("Most In-Demand Skills in Business Intelligence Postings")
-plt.tight_layout()
-plt.show()
+plot_df = demand_pct.sort_values().rename_axis("Skill").reset_index(name="Pct")
+fig = px.bar(plot_df, x="Pct", y="Skill", orientation="h",
+             title="Most In-Demand Skills in Data Scientist Postings")
+fig.update_xaxes(title="% of postings listing the skill")
+fig.update_yaxes(title="")
+fig.show()
 ```
 
 ### Team skill levels
@@ -54,29 +61,29 @@ plt.show()
 Scale: 1 = Beginner, 2 = Basic, 3 = Intermediate, 4 = Advanced, 5 = Expert.
 
 ```{python}
-# EDIT: replace names and scores with your real team's
+# EDIT: replace the names and scores below with your team's REAL self-ratings.
+# Keep the order [member 1, member 2, member 3, member 4].
 team = {
     "Name": ["Richa", "James", "Ben", "Victoria"],
-    "SQL":                [4, 3, 3, 2],
-    "Python":             [4, 3, 4, 2],
-    "Tableau":            [2, 3, 1, 2],
-    "Power BI":           [2, 2, 1, 3],
-    "Excel":              [4, 4, 3, 4],
-    "Data Visualization": [3, 3, 2, 3],
-    "Data Analysis":      [4, 4, 3, 3],
-    "ETL":                [2, 1, 1, 2],
-    "Statistics":         [3, 3, 4, 2],
-    "Machine Learning":   [3, 2, 3, 1],
-    "Cloud (AWS/Azure)":  [2, 1, 1, 2],
-    "Communication":      [4, 4, 3, 4],
+    "Python":                [4, 3, 4, 2],
+    "SQL":                   [4, 3, 3, 2],
+    "Machine Learning":      [3, 2, 3, 1],
+    "Deep Learning":         [2, 1, 2, 1],
+    "TensorFlow":            [2, 1, 2, 1],
+    "Data Pipelines":        [2, 1, 1, 2],
+    "Cloud (AWS/Azure/GCP)": [2, 1, 1, 2],
+    "Statistics":            [3, 3, 4, 2],
+    "Tableau":               [2, 3, 1, 2],
+    "Power BI":              [2, 2, 1, 3],
+    "Databricks":            [1, 1, 1, 2],
+    "Kubernetes":            [1, 1, 1, 1],
 }
 df_skills = pd.DataFrame(team).set_index("Name")
 
-plt.figure(figsize=(10, 4.5))
-sns.heatmap(df_skills, annot=True, cmap="coolwarm", linewidths=0.5, vmin=1, vmax=5)
-plt.title("Team Skill Levels Heatmap")
-plt.tight_layout()
-plt.show()
+fig = px.imshow(df_skills, text_auto=True, color_continuous_scale="Blues",
+                zmin=1, zmax=5, aspect="auto",
+                title="Team Skill Levels Heatmap")
+fig.show()
 ```
 
 ### Skill gaps
@@ -87,11 +94,10 @@ Required level is scaled from market demand: the most-demanded skill maps to 5, 
 required = (demand / demand.max() * 5)
 gap = (required - df_skills[required.index]).clip(lower=0).round(1)
 
-plt.figure(figsize=(10, 4.5))
-sns.heatmap(gap, annot=True, cmap="Reds", linewidths=0.5)
-plt.title("Skill Gaps vs. Market Demand (higher = bigger gap)")
-plt.tight_layout()
-plt.show()
+fig = px.imshow(gap, text_auto=".1f", color_continuous_scale="Reds",
+                aspect="auto",
+                title="Skill Gaps vs. Market Demand (higher = bigger gap)")
+fig.show()
 ```
 
 ```{python}
@@ -105,9 +111,61 @@ summary
 
 ### Improvement plan
 
+#### Priorities per member
+
+Each member's three largest gaps, taken from the gap heatmap above.
+
 ```{python}
-top_gaps = gap.apply(
-    lambda r: ", ".join(r.sort_values(ascending=False).head(3).index), axis=1
-)
-top_gaps.rename("Top 3 priority skills").to_frame()
+top3 = {
+    name: [s for s in row.sort_values(ascending=False).head(3).index if row[s] > 0]
+    for name, row in gap.iterrows()
+}
+lines = []
+for name, skills in top3.items():
+    if skills:
+        items = ", ".join(f"**{s}** (gap {gap.loc[name, s]})" for s in skills)
+    else:
+        items = "no gaps against the market-required levels"
+    lines.append(f"- **{name}:** {items}")
+display(Markdown("\n".join(lines)))
 ```
+
+#### Resources
+
+```{python}
+resources = {
+    "Python": "Kaggle Learn: Python and Pandas (free, short, hands-on)",
+    "SQL": "Kaggle Learn: Intro to SQL, then Mode's SQL Tutorial",
+    "Machine Learning": "Coursera: Machine Learning Specialization (DeepLearning.AI / Stanford)",
+    "Deep Learning": "fast.ai Practical Deep Learning, or the DeepLearning.AI Deep Learning Specialization",
+    "TensorFlow": "Official TensorFlow tutorials at tensorflow.org/tutorials",
+    "Data Pipelines": "DataTalks.Club Data Engineering Zoomcamp (free) and the Apache Airflow docs",
+    "Cloud (AWS/Azure/GCP)": "AWS Skill Builder or Microsoft Learn (free fundamentals paths)",
+    "Statistics": "Khan Academy Statistics and Probability, or a Coursera statistics course",
+    "Tableau": "Tableau Public free training videos",
+    "Power BI": "Microsoft Learn: Power BI learning paths",
+    "Databricks": "Databricks Academy free self-paced courses",
+    "Kubernetes": "Official tutorials at kubernetes.io/docs/tutorials",
+}
+priority_skills = sorted({s for skills in top3.values() for s in skills})
+rows = ["| Priority skill | Suggested course or resource |", "|---|---|"]
+rows += [f"| {s} | {resources.get(s, 'Official documentation')} |" for s in priority_skills]
+display(Markdown("\n".join(rows)))
+```
+
+#### Team collaboration
+
+The strongest member on each priority skill teaches the others who need it.
+
+```{python}
+lines = []
+for s in priority_skills:
+    teacher = df_skills[s].idxmax()
+    learners = [n for n, sk in top3.items() if s in sk and n != teacher]
+    if learners:
+        lines.append(f"- **{s}:** {teacher} (level {df_skills.loc[teacher, s]}) "
+                     f"leads a short session for {', '.join(learners)}.")
+display(Markdown("\n".join(lines)))
+```
+
+To make this work in practice, the team will hold one 30-minute skill-share each week, with the teacher walking through a small example. Members will also pair up on the project's own tasks, such as cleaning data or building a chart, so that each person practices their priority skills on real work. Finally, we will build one shared practice project on this project's market dataset and review each other's changes through GitHub before merging.
