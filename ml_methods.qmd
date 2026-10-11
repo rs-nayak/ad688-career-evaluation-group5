@@ -85,7 +85,7 @@ best_k = int(k_scores.loc[k_scores["silhouette"].idxmax(), "k"])
 print(f"Selected k = {best_k} (highest silhouette score)")
 ```
 
-*Interpretation: [after rendering, add 1-2 sentences on what the elbow and silhouette plots show and why this k was chosen.]*
+*Interpretation: The silhouette score was highest at k = 5, so we used five segments. With only 133 postings, the clusters are a rough guide and could change with different features.*
 
 ## Market Segments
 
@@ -135,10 +135,11 @@ fig.update_layout(xaxis_title="Segment", yaxis_title="Annual salary midpoint (US
 fig.show()
 ```
 
-*Interpretation: [after rendering, name each segment (for example, "entry-level, lower pay" or "senior, high pay") using the profile table, and say which one best fits our team.]*
+*Interpretation: Segment 1 (40 postings) is high-pay, on-site roles, with a median salary of about $192K and about 9.5 listed skills. Segment 2 (25 postings) is high-pay remote roles, the only fully remote group, at about $200K. Segment 3 (44 postings) is the largest group: high-pay roles asking for about one year of experience, at about $184K. Segment 4 (9 postings) is short postings that list few skills and no software skills, so it says little about what the work requires. Segment 5 (15 postings) is the lower-pay group, at about $90K, with a full skill list. For a team early in their careers, Segments 1 and 2 stand out: median minimum experience is 0 years and pay is high, and Segment 2 is the only remote option.*
 
 ## Limitations
 
-- The panel is small (about 760 postings), so segments can shift with a different random seed or feature set.
+- Only 133 of the 760 postings had both salary and minimum experience, so segments rest on a small sample and can shift with a different random seed or feature set.
 - Salary is the posted range midpoint, not actual pay.
+- Postings with no stated experience may be recorded as 0 years, which can make roles look more entry-level than they are.
 - Clusters describe patterns in postings; they do not say which role is best for any one person.
