@@ -106,7 +106,7 @@ Each member rated themselves from 1 (beginner) to 5 (expert) on 12 skills. Marke
 
 | Member | Contribution |
 |---|---|
-| Richa Nayak | | 
+| Richa Nayak | | Github and Quarto website initial setup; Data Preparation and cleaning for usable dataset; Market Baseline analytics; website updates for Home, Introduction, Data Preparation, and Market Baseline; and the final presentation slides
 | Benjamin Nagle | |
 | James Lillis | | Literature Review-Sources and Explanation, Skill Gap Analysis, Exploratory Data Analysis Checks, Final Checks
 | Victoria Loukas | Predictive Modeling page (K-Means market segments and interpretation), Career Evaluation page, Final Recommendations page, and the first draft of this report. 

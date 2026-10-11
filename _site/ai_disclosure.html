@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AI Use Disclosure – AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7c0f67eba7e864f644f943ef9a6fd48f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./introduction.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./data_preparation.html"> 
+<span class="menu-text">Data Preparation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./market_baseline.html"> 
+<span class="menu-text">Market Baseline</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eda.html"> 
+<span class="menu-text">Exploratory Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./skill_gap_analysis.html"> 
+<span class="menu-text">Skill Gap Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./ml_methods.html"> 
+<span class="menu-text">Predictive Modeling</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./career_evaluation.html"> 
+<span class="menu-text">Career Evaluation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./final_recommendations.html"> 
+<span class="menu-text">Final Recommendations</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#how-ai-was-used" id="toc-how-ai-was-used" class="nav-link" data-scroll-target="#how-ai-was-used">How AI Was Used</a>
+  <ul class="collapse">
+  <li><a href="#interpreting-the-project-instructions" id="toc-interpreting-the-project-instructions" class="nav-link" data-scroll-target="#interpreting-the-project-instructions">1. Interpreting the project instructions</a></li>
+  <li><a href="#reviewing-our-published-site-against-the-requirements" id="toc-reviewing-our-published-site-against-the-requirements" class="nav-link" data-scroll-target="#reviewing-our-published-site-against-the-requirements">2. Reviewing our published site against the requirements</a></li>
+  <li><a href="#suggesting-an-analytical-approach" id="toc-suggesting-an-analytical-approach" class="nav-link" data-scroll-target="#suggesting-an-analytical-approach">3. Suggesting an analytical approach</a></li>
+  <li><a href="#flagging-potential-issues-for-us-to-check" id="toc-flagging-potential-issues-for-us-to-check" class="nav-link" data-scroll-target="#flagging-potential-issues-for-us-to-check">4. Flagging potential issues for us to check</a></li>
+  <li><a href="#completion-and-planning-checklist" id="toc-completion-and-planning-checklist" class="nav-link" data-scroll-target="#completion-and-planning-checklist">5. Completion and planning checklist</a></li>
+  </ul></li>
+  <li><a href="#what-ai-did-not-do" id="toc-what-ai-did-not-do" class="nav-link" data-scroll-target="#what-ai-did-not-do">What AI Did Not Do</a></li>
+  <li><a href="#verification-and-responsibility" id="toc-verification-and-responsibility" class="nav-link" data-scroll-target="#verification-and-responsibility">Verification and Responsibility</a></li>
+  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AI Use Disclosure</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>Our team used a generative AI assistant as a <strong>reviewer and planning aid</strong> during the final stages of this project (Modules 5 and 6). It did <strong>not</strong> generate our data, run our analyses, or write the content of our analytical pages. Every finding, table, and figure on this site was produced by team members from our own code and our cleaned dataset (<code>output/career_market_panel.csv</code>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 78%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Item</strong></th>
+<th><strong>Detail</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tool</td>
+<td>Claude (Anthropic), Claude Opus 5.5, via the claude.ai web app</td>
+</tr>
+<tr class="even">
+<td>Date(s) of use</td>
+<td>October 11, 2026</td>
+</tr>
+<tr class="odd">
+<td>Used by</td>
+<td>Victoria Loukas</td>
+</tr>
+<tr class="even">
+<td>Project stage</td>
+<td>Module 5 (final analytics and report) and Module 6 (presentation)</td>
+</tr>
+<tr class="odd">
+<td>Data shared</td>
+<td>Course instructions (pasted text) and our public GitHub Pages URL</td>
+</tr>
+<tr class="even">
+<td>Data <strong>not</strong> shared</td>
+<td>Our API key, <code>.env</code> file, raw parquet files, or private data</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-ai-was-used" class="level2">
+<h2 class="anchored" data-anchor-id="how-ai-was-used">How AI Was Used</h2>
+<section id="interpreting-the-project-instructions" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-project-instructions">1. Interpreting the project instructions</h3>
+<p>We pasted the Module 5 instructions (Step 4, final analytics, and report) and the Module 6 instructions (final presentation and team assessment) into the assistant. We asked it to summarize the requirements: the three acceptable analytics tracks (regression, classification, segmentation/ranking), the five interpretation elements each analytical section needs, the seven required report sections, and the presentation flow and evidence slides.</p>
+</section>
+<section id="reviewing-our-published-site-against-the-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="reviewing-our-published-site-against-the-requirements">2. Reviewing our published site against the requirements</h3>
+<p>We shared the URL of our GitHub Pages site. The assistant read our published pages (Home, Data Preparation, Market Baseline, Skill Gap Analysis, Predictive Modeling, Career Evaluation, and Final Recommendations) and compared them with the checklists. It noted which requirements appeared complete and which pages were still placeholders.</p>
+</section>
+<section id="suggesting-an-analytical-approach" class="level3">
+<h3 class="anchored" data-anchor-id="suggesting-an-analytical-approach">3. Suggesting an analytical approach</h3>
+<p>The assistant pointed out that only 240 of our 760 postings (31.6%) have usable salary data, while skills coverage is 96.4%. It suggested centering our final analytics on skills, consistent with our product question. Specifically, it proposed:</p>
+<ul>
+<li>a skill opportunity <strong>scorecard</strong> (Option C), combining demand share, salary premium, and accessibility (share of entry-level postings), with justified weights and a sensitivity check; and</li>
+<li>a supporting <strong>high-salary classifier</strong> (Option B), using logistic regression on the salaried subset, evaluated with accuracy, precision/recall, F1, and a confusion matrix.</li>
+</ul>
+<p>The team did not adopt the scorecard or the classifier. We used K-Means segmentation (Option C) on all 760 postings instead, because it uses every posting and does not depend on salary, which is listed on only 31.6% of postings.</p>
+</section>
+<section id="flagging-potential-issues-for-us-to-check" class="level3">
+<h3 class="anchored" data-anchor-id="flagging-potential-issues-for-us-to-check">4. Flagging potential issues for us to check</h3>
+<p>The assistant raised two issues for the team to investigate. We verified both ourselves.</p>
+<ul>
+<li><strong>Skill-gap scaling.</strong> Our method set the most-demanded skill to level 5 and scaled the others proportionally. This produced a required level below 1 for most skills, so nearly every skill showed a gap of zero. We have not changed the scaling yet. The self-ratings on that page are also still marked as placeholders in the code, so both need to be confirmed by the team before we submit.</li>
+<li><strong>Experience field.</strong> 339 postings (44.6%) list a 0-year minimum. That may reflect a source default rather than a true entry-level requirement. We checked the Data Preparation page: missing experience was labeled “Not specified,” not 0, so the 339 postings are ones that list 0 years. We cannot tell from the data whether some of those are source defaults.</li>
+</ul>
+</section>
+<section id="completion-and-planning-checklist" class="level3">
+<h3 class="anchored" data-anchor-id="completion-and-planning-checklist">5. Completion and planning checklist</h3>
+<p>The assistant gave us a prioritized to-do list for finishing the project. That list covered completing the analytics and Career Evaluation pages, writing recommendations and limitations, creating <code>final_report.qmd</code>, building the slide deck, and documenting team contributions. We used it to plan our final work and standups.</p>
+<!-- EDIT: add sections here for any later AI use, e.g. help debugging code, drafting text, or slide outlines. Be specific about what was AI-assisted and what the team changed. -->
+</section>
+</section>
+<section id="what-ai-did-not-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-ai-did-not-do">What AI Did Not Do</h2>
+<ul>
+<li>It did not access, download, or process our dataset.</li>
+<li>It did not produce any of the numbers, tables, or figures on this site. All results come from our own code.</li>
+<li>It did not write the analytical text on the Data Preparation, Market Baseline, or Skill Gap Analysis pages, which were completed before this use.</li>
+<li>It did not decide our scope, career pathway, industry, or recommendations.</li>
+</ul>
+</section>
+<section id="verification-and-responsibility" class="level2">
+<h2 class="anchored" data-anchor-id="verification-and-responsibility">Verification and Responsibility</h2>
+<p>We treated every AI suggestion as a recommendation to evaluate, not as a fact. We checked the claims it made about our site against our own pages and code. The team is fully responsible for the accuracy, interpretation, and conclusions presented in this project.</p>
+</section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p>Anthropic. (2026). <em>Claude</em> (Claude Opus 5.5) [Large language model]. https://claude.ai</p>
+<p>Full conversation transcript (October 11, 2026): <a href="https://claude.ai/share/114cb123-50dd-4994-805c-b3a4f1b1898f" class="uri">https://claude.ai/share/114cb123-50dd-4994-805c-b3a4f1b1898f</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/rs-nayak\.github\.io\/ad688-career-evaluation-group5\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
