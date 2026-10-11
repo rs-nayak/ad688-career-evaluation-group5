@@ -62,7 +62,7 @@ Scale: 1 = Beginner, 2 = Basic, 3 = Intermediate, 4 = Advanced, 5 = Expert.
 
 ```{python}
 # EDIT: replace the names and scores below with your team's REAL self-ratings.
-# Keep the order [member 1, member 2, member 3, member 4].
+# Keep the order [Richa, James, Ben, Victoria].
 team = {
     "Name": ["Richa", "James", "Ben", "Victoria"],
     "Python":                [4, 3, 4, 2],
