@@ -26,10 +26,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -73,6 +108,15 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script>
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+</script>
+<script type="module">import "https://cdn.plot.ly/plotly-4.0.0.min"</script>
+
 
 
 <link rel="stylesheet" href="styles.css">
@@ -142,8 +186,20 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#feature-preparation" id="toc-feature-preparation" class="nav-link active" data-scroll-target="#feature-preparation">Feature Preparation</a></li>
+  <li><a href="#choosing-the-number-of-clusters" id="toc-choosing-the-number-of-clusters" class="nav-link" data-scroll-target="#choosing-the-number-of-clusters">Choosing the Number of Clusters</a></li>
+  <li><a href="#market-segments" id="toc-market-segments" class="nav-link" data-scroll-target="#market-segments">Market Segments</a>
+  <ul class="collapse">
+  <li><a href="#what-defines-each-segment" id="toc-what-defines-each-segment" class="nav-link" data-scroll-target="#what-defines-each-segment">What defines each segment</a></li>
+  </ul></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -167,9 +223,318 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Clustering and machine learning methods will be added here.</p>
+<p>This page groups Data Scientist postings in NAICS 5417 into market segments using <strong>unsupervised learning</strong> (K-Means, with PCA for visualization). The goal is to see what kinds of roles exist in the market so we can compare them with our own skill profiles.</p>
+<section id="feature-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="feature-preparation">Feature Preparation</h2>
+<p>We use the cleaned posting panel from the Data Preparation page. Features are salary midpoint, minimum years of experience, the number of listed skills, the number of software skills, and the work arrangement. Postings missing salary or experience are dropped for this model.</p>
+<div id="f7317877" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"output/career_market_panel.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> count_items(x):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Skill columns are saved as list-like strings in the CSV."""</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(x, (<span class="bu">list</span>, <span class="bu">tuple</span>)):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(x)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pd.isna(x):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> ast.literal_eval(<span class="bu">str</span>(x))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(v) <span class="cf">if</span> <span class="bu">isinstance</span>(v, (<span class="bu">list</span>, <span class="bu">tuple</span>, <span class="bu">set</span>)) <span class="cf">else</span> <span class="dv">1</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> (<span class="pp">ValueError</span>, <span class="pp">SyntaxError</span>):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        s <span class="op">=</span> <span class="bu">str</span>(x).strip(<span class="st">"[]"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>([p <span class="cf">for</span> p <span class="kw">in</span> s.split(<span class="st">","</span>) <span class="cf">if</span> p.strip()])</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"n_skills"</span>] <span class="op">=</span> df[<span class="st">"skills_array"</span>].<span class="bu">apply</span>(count_items)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"n_software_skills"</span>] <span class="op">=</span> df[<span class="st">"software_skills_array"</span>].<span class="bu">apply</span>(count_items)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>num_cols <span class="op">=</span> [<span class="st">"annual_salary_midpoint"</span>, <span class="st">"min_experience_years"</span>, <span class="st">"n_skills"</span>, <span class="st">"n_software_skills"</span>]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>model_df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">"annual_salary_midpoint"</span>, <span class="st">"min_experience_years"</span>]).copy()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>remote <span class="op">=</span> pd.get_dummies(model_df[<span class="st">"remote_type_clean"</span>], prefix<span class="op">=</span><span class="st">"work"</span>, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.concat([model_df[num_cols].reset_index(drop<span class="op">=</span><span class="va">True</span>), remote.reset_index(drop<span class="op">=</span><span class="va">True</span>)], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> StandardScaler().fit_transform(X)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Postings used: </span><span class="sc">{</span><span class="bu">len</span>(model_df)<span class="sc">:,}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">:,}</span><span class="ss">"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Features: </span><span class="sc">{</span><span class="bu">list</span>(X.columns)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Postings used: 133 of 760
+Features: ['annual_salary_midpoint', 'min_experience_years', 'n_skills', 'n_software_skills', 'work_Hybrid', 'work_Onsite', 'work_Remote', 'work_Unknown']</code></pre>
+</div>
+</div>
+</section>
+<section id="choosing-the-number-of-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="choosing-the-number-of-clusters">Choosing the Number of Clusters</h2>
+<p>We fit K-Means for k = 2 to 8 and compare inertia (elbow) and silhouette score.</p>
+<div id="0e5adcd9" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">9</span>):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span>RANDOM_STATE).fit(X_scaled)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"k"</span>: k, <span class="st">"inertia"</span>: km.inertia_,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"silhouette"</span>: silhouette_score(X_scaled, km.labels_)})</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>k_scores <span class="op">=</span> pd.DataFrame(rows)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.line(k_scores, x<span class="op">=</span><span class="st">"k"</span>, y<span class="op">=</span><span class="st">"silhouette"</span>, markers<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              title<span class="op">=</span><span class="st">"Silhouette score by number of clusters"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">"Number of clusters (k)"</span>, yaxis_title<span class="op">=</span><span class="st">"Silhouette score"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.0.0.min.js" integrity="sha256-FEYfO0yRyLtZCpnW0Dw/0DHKQO7Afrq3ml4+rBB818o=" crossorigin="anonymous"></script>                <div id="53945e73-bf61-41e2-a08b-58bc9c12fac3" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("53945e73-bf61-41e2-a08b-58bc9c12fac3")) {                    Plotly.newPlot(                        "53945e73-bf61-41e2-a08b-58bc9c12fac3",                        [{"hovertemplate":"k=%{x}\u003cbr\u003esilhouette=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#2C7FB8","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":{"dtype":"i1","bdata":"AgMEBQYHCA=="},"xaxis":"x","y":{"dtype":"f8","bdata":"+A5UL3ZTzz+rAJGhd2LVP4m4CtsVcNo\u002ftxT5sbEo3D8BnUr\u002f0XDZPwwVbdiq99c\u002fiB5gVCq+1z8="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#2C7FB8","#41B6C4","#A1DAB4","#FDAE61","#D7191C"],"font":{"color":"#2a3f5f","family":"Arial","size":14},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of clusters (k)"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Silhouette score"}},"legend":{"tracegroupgap":0},"title":{"text":"Silhouette score by number of clusters"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('53945e73-bf61-41e2-a08b-58bc9c12fac3');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<div id="d45e6fb7" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.line(k_scores, x<span class="op">=</span><span class="st">"k"</span>, y<span class="op">=</span><span class="st">"inertia"</span>, markers<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>              title<span class="op">=</span><span class="st">"Elbow plot: inertia by number of clusters"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">"Number of clusters (k)"</span>, yaxis_title<span class="op">=</span><span class="st">"Inertia"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.0.0.min.js" integrity="sha256-FEYfO0yRyLtZCpnW0Dw/0DHKQO7Afrq3ml4+rBB818o=" crossorigin="anonymous"></script>                <div id="59c3f925-9485-4eba-979f-83e4565041a9" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("59c3f925-9485-4eba-979f-83e4565041a9")) {                    Plotly.newPlot(                        "59c3f925-9485-4eba-979f-83e4565041a9",                        [{"hovertemplate":"k=%{x}\u003cbr\u003einertia=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#2C7FB8","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":{"dtype":"i1","bdata":"AgMEBQYHCA=="},"xaxis":"x","y":{"dtype":"f8","bdata":"4fUW5hfmiUCjvMesI1+EQPBBDZDREn5A1bbz0\u002fCTd0AymIu8M890QNGErZXKiXJAz8cEMcBFcEA="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#2C7FB8","#41B6C4","#A1DAB4","#FDAE61","#D7191C"],"font":{"color":"#2a3f5f","family":"Arial","size":14},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of clusters (k)"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Inertia"}},"legend":{"tracegroupgap":0},"title":{"text":"Elbow plot: inertia by number of clusters"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('59c3f925-9485-4eba-979f-83e4565041a9');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<div id="633e37b7" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>best_k <span class="op">=</span> <span class="bu">int</span>(k_scores.loc[k_scores[<span class="st">"silhouette"</span>].idxmax(), <span class="st">"k"</span>])</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Selected k = </span><span class="sc">{</span>best_k<span class="sc">}</span><span class="ss"> (highest silhouette score)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Selected k = 5 (highest silhouette score)</code></pre>
+</div>
+</div>
+<p><em>Interpretation: [after rendering, add 1-2 sentences on what the elbow and silhouette plots show and why this k was chosen.]</em></p>
+</section>
+<section id="market-segments" class="level2">
+<h2 class="anchored" data-anchor-id="market-segments">Market Segments</h2>
+<div id="e5c87b14" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>best_k, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span>RANDOM_STATE).fit(X_scaled)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model_df[<span class="st">"cluster"</span>] <span class="op">=</span> (km.labels_ <span class="op">+</span> <span class="dv">1</span>).astype(<span class="bu">str</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>RANDOM_STATE)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> pca.fit_transform(X_scaled)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>model_df[<span class="st">"PC1"</span>], model_df[<span class="st">"PC2"</span>] <span class="op">=</span> coords[:, <span class="dv">0</span>], coords[:, <span class="dv">1</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> pca.explained_variance_ratio_ <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter(</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    model_df, x<span class="op">=</span><span class="st">"PC1"</span>, y<span class="op">=</span><span class="st">"PC2"</span>, color<span class="op">=</span><span class="st">"cluster"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    hover_data<span class="op">=</span>[<span class="st">"title_clean"</span>, <span class="st">"company_clean"</span>, <span class="st">"annual_salary_midpoint"</span>],</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Data Scientist postings by market segment (PCA view)"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    category_orders<span class="op">=</span>{<span class="st">"cluster"</span>: <span class="bu">sorted</span>(model_df[<span class="st">"cluster"</span>].unique())},</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="ss">f"PC1 (</span><span class="sc">{</span>var[<span class="dv">0</span>]<span class="sc">:.1f}</span><span class="ss">% of variance)"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                  yaxis_title<span class="op">=</span><span class="ss">f"PC2 (</span><span class="sc">{</span>var[<span class="dv">1</span>]<span class="sc">:.1f}</span><span class="ss">% of variance)"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.0.0.min.js" integrity="sha256-FEYfO0yRyLtZCpnW0Dw/0DHKQO7Afrq3ml4+rBB818o=" crossorigin="anonymous"></script>                <div id="9ea414a4-0b62-468f-86d3-03ddda4425c4" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("9ea414a4-0b62-468f-86d3-03ddda4425c4")) {                    Plotly.newPlot(                        "9ea414a4-0b62-468f-86d3-03ddda4425c4",                        [{"customdata":[["AI Engineering Manager","Zocdoc",240000.0],["Applied AI Architect","Anthropic",327500.0],["Applied AI Architect","Anthropic",277500.0],["Applied AI Engineer","Etched",212500.0],["Data Science Lead","Prove",189500.0],["Data Scientist","Ramp",217225.0],["Data Scientist","Haystack",126800.0],["Data Scientists","Salesforce",212750.0],["Data Scientists","Gormat",139500.0],["Data Scientists","LLNL",184450.0],["Data Scientists","Elcompanies",139800.0],["Data Scientists","Ramp",217225.0],["Data Scientists","Samba TV",175000.0],["Data Scientists","Zocdoc",240000.0],["Data Scientists","Chime",288500.0],["Data Scientists","Figure",285000.0],["Data Scientists","Wayve",353350.0],["Data Scientists","Lyrahealth",170000.0],["Data Scientists","Haystack",126800.0],["Decision Scientist Lead","Salesforce",229150.0],["Helix AI Engineer","Figure",285000.0],["Institutional Analytics & AI Specialist","Patrick & Henry Community College",70000.0],["Machine Learning Engineer","True Anomaly",162500.0],["Machine Learning Engineer","Blue River Technology",256500.0],["Machine Learning Engineer - Associate","Voyager Technologies, Inc.",145000.0],["Machine Learning Engineer III","Avav",156650.0],["Machine Learning Engineer III","Expedia Group",175250.0],["Machine Learning Research Engineer","Lawrence Livermore National Laboratory",184452.0],["Machine Learning Research Engineer","LLNL",184450.0],["Marketing Content Specialist","Motion Tactic",70000.0],["RWD Data Analyst","Loopback Analytics",62400.0],["SW Development Intern\u002fData Analytics","Jobgether",56160.0],["Senior Data Scientist","Instacart",195500.0],["Senior Data Scientist","Haystack",216300.0],["Senior Director of Marketing","Pryon",207500.0],["Senior ML Engineer","Lyrahealth",170000.0],["Sr. Data Analyst","Lyrahealth",135500.0],["Staff Machine Learning Engineer","AppFolio",225000.0],["Staff Machine Learning Engineer","Wayve",353350.0],["Staff Machine Learning Engineer","Wayve",388685.0]],"hovertemplate":"cluster=1\u003cbr\u003ePC1=%{x}\u003cbr\u003ePC2=%{y}\u003cbr\u003etitle_clean=%{customdata[0]}\u003cbr\u003ecompany_clean=%{customdata[1]}\u003cbr\u003eannual_salary_midpoint=%{customdata[2]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"1","marker":{"color":"#2C7FB8","symbol":"circle"},"mode":"markers","name":"1","orientation":"v","showlegend":true,"x":{"dtype":"f8","bdata":"KBLY3XlN7T8wdPnEfSAGQGDlS4wXHgBAYZKnr7dE+D9T8+bssZL6P9SAmxjNqvs\u002fmJMfdggd4T8n9kUhRuv5P05shAxYfd8\u002fgbG\u002fwuB98j+LYmsEH8fwP9SAmxjNqvs\u002fH953Kxvj9T8oEtjdeU3tP7Z+xIM3Bv8\u002fKGGydhqW+j+eFE9eve77P85XgtvNPN0\u002fmJMfdggd4T+odAfnKAHnPyhhsnYalvo\u002fa3LBsBCGyb+uWLWDGNPgP3DLeOS\u002fSvg\u002fZKdgQwS92T9nSq40LbG8v3omsr3rztG\u002f1cv\u002fT+t98j+Bsb\u002fC4H3yP+jrxLZtKek\u002fdgl1sFAK0j9AfnG76gfQP5MeSzmxfgBAk+nhyVug9D\u002f\u002fnId6ERf1P85XgtvNPN0\u002fzuW4BW702D8R8KSukcH1P54UT1697vs\u002fDCbIk\u002fTG\u002fj8="},"xaxis":"x","y":{"dtype":"f8","bdata":"p3ZZVGaP37+IU0lSk2TePzRWlpHYpso\u002frUW0tgbZ4L897Np23Wzfv1BehJNSD7W\u002f5\u002fAbIQ\u002fF3b\u002fM354weV3gP\u002fHs8crhjqc\u002fkZ6x9VIt3b8AMEqIOvy\u002fP1BehJNSD7W\u002fH+M3GoLY17+ndllUZo\u002ffv9HilLZvt5w\u002ffB8Q4B7Zub+RDdVcrjOYP3bLq3U3h9G\u002f5\u002fAbIQ\u002fF3b90z1jZiCG3P3wfEOAe2bm\u002f9drJ5Y5b878tIN4vtIjov8YzQEABzcm\u002fzX5eNlSJ5b+FFzrOrDnkvxMYEPl\u002f2+W\u002fT5d9WTUt3b+RnrH1Ui3dv8\u002fAEEpXUuC\u002fx+\u002f6GsYN8L\u002feDYEJ\u002fmfwv398ItGNv9G\u002fo2a\u002f6\u002fp36T\u002fZkRxa+JflP3bLq3U3h9G\u002fBoe103CV67+KtBbJOATUv5EN1VyuM5g\u002foJXwHHn9wj8="},"yaxis":"y","type":"scatter"},{"customdata":[["AI Engineer - Forward Deployed","Edison Scientific",275000.0],["AI Engineer - Forward Deployed","Edison Scientific",275000.0],["Agentic AI Engineer","Benchling",220500.0],["Analytics Lead, Full Stack","Jobgether",175000.0],["Associate Data Scientist","Amplify",102500.0],["Data Scientist, AI\u002fML","Jobgether",255000.0],["Data Scientists","Heart",47840.0],["Data Scientists","Clubhouse",291000.0],["Data Scientists","Terraytx",151000.0],["Data Scientists","Reddit",260450.0],["Data Scientists","GitLab",178800.0],["Data Scientists","Qventus",155000.0],["Director of Data Science","Fanaticscollectibles",346350.0],["Embedded AI Engineer, On-Device Models","Deepgram",246700.0],["Intern, Data Science","Heart",47840.0],["Machine Learning Engineer Intern - 2026 Summer","ByteDance",88920.0],["Research Engineer, Machine Learning Systems","Deepgram",200000.0],["Research Staff, Data Science","Deepgram",185000.0],["Sales AI Engineer","Figma",218000.0],["Senior AI Engineer","GitLab",178800.0],["Senior Data Scientist - GTM Data","Pandadoc",175000.0],["Senior Machine Learning Engineer","Plaid",272200.0],["Senior Product Manager","Qventus",155000.0],["Senior Technical Product Manager","Reddit",260450.0],["Staff AI Engineer","Spoton",250000.0]],"hovertemplate":"cluster=2\u003cbr\u003ePC1=%{x}\u003cbr\u003ePC2=%{y}\u003cbr\u003etitle_clean=%{customdata[0]}\u003cbr\u003ecompany_clean=%{customdata[1]}\u003cbr\u003eannual_salary_midpoint=%{customdata[2]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2","marker":{"color":"#41B6C4","symbol":"circle"},"mode":"markers","name":"2","orientation":"v","showlegend":true,"x":{"dtype":"f8","bdata":"vQ\u002fajfJC2b+9D9qN8kLZv9vdHWgj4N+\u002fhzEUZ84B77\u002fZs3wPHsr3v2P+atKOfdK\u002fkPfIB0ZUBMDDP8c4PBPjP\u002fMCwdg0de+\u002fS\u002f7YGfQz1j+SDKlwqKXxvyRlsndrVc6\u002fKbf0FfnLtr8owkgeyvLOv5D3yAdGVATAdQq3gfzh+L+MuWP+asbLvzHqWxXWq+G\u002fltszDEy32L+SDKlwqKXxv9gDF8+H3u2\u002fsgFAOmUswD8kZbJ3a1XOv0v+2Bn0M9Y\u002fLozXh5O0oT8="},"xaxis":"x","y":{"dtype":"f8","bdata":"1Xr6vTpa6L\u002fVevq9Olrov8WBF13zrdy\u002fSQCQCQiz6b8gb4cYrEX6v0G+leCM1d6\u002f6vp6oLl6AcA9TjJfEFrBvz2ZeDifqvW\u002fsL1B1l7F47+Q\u002fSochfb1v5i9Ezh4OOi\u002fA06OUeWp0b9z7aSyTMrsv+r6eqC5egHAbpGFWwMK+7\u002f9H4r3BFXuv3Mox8Y24fG\u002ftTBu1BgE8L+Q\u002fSochfb1vyuwN4BwrO6\u002femKZ6tXB6r+YvRM4eDjov7C9QdZexeO\u002fYq0X2zWv6L8="},"yaxis":"y","type":"scatter"},{"customdata":[["AI Data Specialist","Accordion",187250.0],["AI engineer","WRITER",233900.0],["AI engineer","WRITER",233900.0],["Consulting: Principal, Analytics Consultant","Marketbridge",182500.0],["Data Science Engineer","Llnl",138165.0],["Data Science Manager","Sentilink",235000.0],["Data Science and Advanced Analytics Intern","AARP",38272.0],["Data Science and Advanced Analytics Intern","AARP",38272.0],["Data Scientist - Agentic AI Systems - IFS Loops","Ifs1",145000.0],["Data Scientist - Agentic AI Systems - Loops","Ifs1",145000.0],["Data Scientist, Marketing","Best Buy",140000.0],["Data Scientist, Product Analytics - USDS","TikTok",236667.0],["Data Scientists","Profluent",265000.0],["Data Scientists","Profluent",265000.0],["Data Scientists","Blue-Nile",152500.0],["Data Scientists","Forgeglobal",195000.0],["Data Scientists","PhysicsX",180000.0],["Data Scientists","Forgeglobal",195000.0],["Data Scientists","Freshworks",215000.0],["Data Scientists","Sentilink",235000.0],["Data Scientists","Aarp",38272.0],["Data Scientists","Upside",185000.0],["GTM AI Engineer","Freshworks",215000.0],["Head of Machine Learning","Sentilink",235000.0],["MLOps Engineer, Mid","Bah",126800.0],["Machine Learning Engineer","Bah",126800.0],["Machine Learning Engineer","Bah",126800.0],["Machine Learning Engineer, E-commerce Recommendation Foundation - USDS","TikTok",188100.0],["Machine Learning Research Engineer","Bah",162000.0],["Machine Learning Scientist, BioML","Profluent",265000.0],["Machine Learning Scientist, Reinforcement Learning","Profluent",265000.0],["PhD Fall Machine Learning Intern","Pinterest",145200.0],["PhD Fall Machine Learning Intern","Pinterest",145200.0],["Principal AI Engineer","Honeywell Aerospace Technologies",235500.0],["Principal Data Scientist - Strategic Insights","Optum",152950.0],["Quantitative Researcher","Forgeglobal",195000.0],["Quantitative Researcher","Forgeglobal",195000.0],["Senior AI Engineer II - Generative AI Research & Development - Technology R&D","American Express",169125.0],["Senior AI Engineer, Unstructured AI","Collibra",229500.0],["Senior Computer Vision Data Scientist","PhysicsX",180000.0],["Senior Data Analyst","Bestow",125000.0],["Senior Data Scientist","Hudson Manpower",109200.0],["Senior Director of Product Management, Video Games","2K",337020.0],["Senior Manager, Planning Transformation & Inventory Strategy","Blue-Nile",152500.0]],"hovertemplate":"cluster=3\u003cbr\u003ePC1=%{x}\u003cbr\u003ePC2=%{y}\u003cbr\u003etitle_clean=%{customdata[0]}\u003cbr\u003ecompany_clean=%{customdata[1]}\u003cbr\u003eannual_salary_midpoint=%{customdata[2]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"3","marker":{"color":"#A1DAB4","symbol":"circle"},"mode":"markers","name":"3","orientation":"v","showlegend":true,"x":{"dtype":"f8","bdata":"RTUOmafM6b8VjoVz\u002f3HtvxWOhXP\u002fce2\u002f1I8UPe9t87+kQINa6tnwv4SvKTnW+d6\u002f7eP326KU8L\u002ft4\u002ffbopTwv+\u002fEQ7cNTfC\u002f78RDtw1N8L+IekNpvEXxv\u002fzD803L1+G\u002fCwg2qay\u002fuj+ux68SuzCqPzaL219B3wDAxatoPgv3678BmLvohKfiv8WraD4L9+u\u002fqSxoRtxU5b+Eryk51vnev+3j99uilPC\u002ffFRqbn+27r+pLGhG3FTlv4SvKTnW+d6\u002fxa\u002fruSLE8b\u002ffiab3vKX6v9+Jpve8pfq\u002fRYZ6qKdZ4b85N\u002fHD\u002fdPnv67HrxK7MKo\u002fCwg2qay\u002fuj9Iv\u002fV75Zj4v0i\u002f9XvlmPi\u002f99Inzbjl+L+\u002fb8Mhvxf2v8WraD4L9+u\u002fxatoPgv3679zn0rFfA26P6vglMMz\u002f+K\u002fAZi76ISn4r85gwRBMjn6v87dBvY3HADAAb4rlu7g3T82i9tfQd8AwA=="},"xaxis":"x","y":{"dtype":"f8","bdata":"XRKjVh4V9D8fGiL9gxH7Px8aIv2DEfs\u002fa8Kr4hKn+j9RlyhycU\u002fxP7a7ozVsigJAPMKfpbHN7j88wp+lsc3uP01RTKJDsvE\u002fTVFMokOy8T9QcJqCrebzP6q6jA2Y3\u002fY\u002f9IK3nuY0\u002fD\u002feRrX39O\u002f\u002fP+nLYtcg3\u002fA\u002fbxKB4kf7+z96TWVZIYr1P28SgeJH+\u002fs\u002fVG6cnFSm9T+2u6M1bIoCQDzCn6Wxze4\u002fhHjJZ2fn\u002fT9UbpycVKb1P7a7ozVsigJA387vfyCr8D\u002f9lsOOVNjuP\u002f2Ww45U2O4\u002fTgMspT3\u002f9T9pMMXuSn\u002f5P95Gtff07\u002f8\u002f9IK3nuY0\u002fD\u002fqVv7e+vLrP+pW\u002ft768us\u002fNa\u002fFMLkQAEAh8aFwMDr6P28SgeJH+\u002fs\u002fbxKB4kf7+z+Y9fo01fH1P23T+Qr5d\u002fY\u002fek1lWSGK9T+EJKeE36rpP673pFy9H+k\u002fdGQsFRYjAEDpy2LXIN\u002fwPw=="},"yaxis":"y","type":"scatter"},{"customdata":[["AI Engineering Enablement Lead","Optiver",200000.0],["AI Engineering Enablement Lead","Optiver",200000.0],["Associate Director, QC Global Analytics","Vaxcyte",191000.0],["Data Scientists","Anthropic",362500.0],["Data Scientists","Optiver",200000.0],["Data Scientists","Optiver",200000.0],["Machine Learning Engineering Manager","Suno",315000.0],["Manager, Applied AI Engineering, Beneficial Deployments","Anthropic",362500.0],["Sr AI Engineer I","American Express",169125.0]],"hovertemplate":"cluster=4\u003cbr\u003ePC1=%{x}\u003cbr\u003ePC2=%{y}\u003cbr\u003etitle_clean=%{customdata[0]}\u003cbr\u003ecompany_clean=%{customdata[1]}\u003cbr\u003eannual_salary_midpoint=%{customdata[2]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"4","marker":{"color":"#FDAE61","symbol":"circle"},"mode":"markers","name":"4","orientation":"v","showlegend":true,"x":{"dtype":"f8","bdata":"NRUUCkd2B0A1FRQKR3YHQJA9kI1Hxg5A7OxEHr\u002fWEkA1FRQKR3YHQDUVFApHdgdAgC6vIutACEDs7EQev9YSQBLmNCCv+QtA"},"xaxis":"x","y":{"dtype":"f8","bdata":"HyXEiHtd3L8fJcSIe13cv2DG\u002ftOUluK\u002f0WGfN2URmT8fJcSIe13cvx8lxIh7Xdy\u002fwXXzuVUNkD\u002fRYZ83ZRGZP82e22Q5NuS\u002f"},"yaxis":"y","type":"scatter"},{"customdata":[["AI Engineering Tech Lead","Hudson Manpower",93600.0],["Applied Artificial Intelligence Machine Learning, Sr Associate","hackajob",161600.0],["Business Intelligence Intern","Eurofins",29120.0],["Data Science & Machine Learning Engineer","Life Science Data Systems",50960.0],["Data Scientists","Eurofins",29120.0],["Data Scientists","LLNL",89700.0],["Data Scientists","Llnl",89718.0],["Data Scientists","Hudson Manpower",93600.0],["Machine Learning Physics Graduate Student","Lawrence Livermore National Laboratory",89718.0],["Machine Learning Physics Graduate Student","LLNL",89700.0],["Machine Learning Physics Graduate Student","Llnl",89718.0],["Manager, Data Science - AI Product","Figma",291500.0],["Product Development Engineer","KLA",159050.0],["Product Manager, Data and Analytics","JPMorganChase",161775.0],["Senior\u002fStaff Safety Research Engineer - Quantitative Risk Assessment","Zoox",226500.0]],"hovertemplate":"cluster=5\u003cbr\u003ePC1=%{x}\u003cbr\u003ePC2=%{y}\u003cbr\u003etitle_clean=%{customdata[0]}\u003cbr\u003ecompany_clean=%{customdata[1]}\u003cbr\u003eannual_salary_midpoint=%{customdata[2]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"5","marker":{"color":"#D7191C","symbol":"circle"},"mode":"markers","name":"5","orientation":"v","showlegend":true,"x":{"dtype":"f8","bdata":"tVrnKhRiAMCrmhwDD1\u002frvyoWZO871wHA4\u002fCGL2PE\u002fb8qFmTvO9cBwIikYCIEfva\u002fkrcfK6V99r+1WucqFGIAwJK3Hyulffa\u002fiKRgIgR+9r+Stx8rpX32vx\u002fsrA8DGsy\u002fQD\u002fs3aUx4b\u002fZnABLLvfyv01wx3lZqui\u002f"},"xaxis":"x","y":{"dtype":"f8","bdata":"hlWoXPmT+L8sNvy1uxz0v8YgBiCGFQPASvWiobmIAcDGIAYghhUDwMisKcuCA\u002f+\u002fcpy0K0AD\u002f7+GVahc+ZP4v3KctCtAA\u002f+\u002fyKwpy4ID\u002f79ynLQrQAP\u002fv365j\u002fSMEOe\u002fOwJ7MC1d978oVVPAoP7wv3IG146WjvO\u002f"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#2C7FB8","#41B6C4","#A1DAB4","#FDAE61","#D7191C"],"font":{"color":"#2a3f5f","family":"Arial","size":14},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"PC1 (27.6% of variance)"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"PC2 (17.9% of variance)"}},"legend":{"title":{"text":"cluster"},"tracegroupgap":0},"title":{"text":"Data Scientist postings by market segment (PCA view)"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('9ea414a4-0b62-468f-86d3-03ddda4425c4');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<section id="what-defines-each-segment" class="level3">
+<h3 class="anchored" data-anchor-id="what-defines-each-segment">What defines each segment</h3>
+<div id="0d78c306" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> (</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    model_df.groupby(<span class="st">"cluster"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    .agg(postings<span class="op">=</span>(<span class="st">"id"</span>, <span class="st">"count"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         median_salary<span class="op">=</span>(<span class="st">"annual_salary_midpoint"</span>, <span class="st">"median"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         median_min_experience<span class="op">=</span>(<span class="st">"min_experience_years"</span>, <span class="st">"median"</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         avg_skills<span class="op">=</span>(<span class="st">"n_skills"</span>, <span class="st">"mean"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         avg_software_skills<span class="op">=</span>(<span class="st">"n_software_skills"</span>, <span class="st">"mean"</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         pct_remote<span class="op">=</span>(<span class="st">"remote_type_clean"</span>, <span class="kw">lambda</span> s: (s <span class="op">==</span> <span class="st">"Remote"</span>).mean() <span class="op">*</span> <span class="dv">100</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>profile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">cluster</th>
+<th data-quarto-table-cell-role="th">postings</th>
+<th data-quarto-table-cell-role="th">median_salary</th>
+<th data-quarto-table-cell-role="th">median_min_experience</th>
+<th data-quarto-table-cell-role="th">avg_skills</th>
+<th data-quarto-table-cell-role="th">avg_software_skills</th>
+<th data-quarto-table-cell-role="th">pct_remote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>40</td>
+<td>192500.0</td>
+<td>0.0</td>
+<td>9.5</td>
+<td>1.8</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>25</td>
+<td>200000.0</td>
+<td>0.0</td>
+<td>9.9</td>
+<td>2.5</td>
+<td>100.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>44</td>
+<td>183750.0</td>
+<td>1.0</td>
+<td>10.0</td>
+<td>2.1</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>9</td>
+<td>200000.0</td>
+<td>0.0</td>
+<td>2.6</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5</td>
+<td>15</td>
+<td>89718.0</td>
+<td>0.0</td>
+<td>10.0</td>
+<td>2.3</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="c9d044b0" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.box(model_df, x<span class="op">=</span><span class="st">"cluster"</span>, y<span class="op">=</span><span class="st">"annual_salary_midpoint"</span>, color<span class="op">=</span><span class="st">"cluster"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>             category_orders<span class="op">=</span>{<span class="st">"cluster"</span>: <span class="bu">sorted</span>(model_df[<span class="st">"cluster"</span>].unique())},</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>             title<span class="op">=</span><span class="st">"Salary distribution by segment"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">"Segment"</span>, yaxis_title<span class="op">=</span><span class="st">"Annual salary midpoint (USD)"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                  showlegend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.0.0.min.js" integrity="sha256-FEYfO0yRyLtZCpnW0Dw/0DHKQO7Afrq3ml4+rBB818o=" crossorigin="anonymous"></script>                <div id="77bfdfa9-ea0b-4c65-8728-37f131eb087c" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("77bfdfa9-ea0b-4c65-8728-37f131eb087c")) {                    Plotly.newPlot(                        "77bfdfa9-ea0b-4c65-8728-37f131eb087c",                        [{"alignmentgroup":"True","hovertemplate":"cluster=%{x}\u003cbr\u003eannual_salary_midpoint=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"1","marker":{"color":"#2C7FB8"},"name":"1","notched":false,"offsetgroup":"1","orientation":"v","showlegend":true,"x":["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAABMDUEAAAAAMP0TQQAAAADw7xBBAAAAAKDwCUEAAAAA4CEHQQAAAABIhApBAAAAAAD1\u002fkAAAAAAcPgJQQAAAABgBwFBAAAAABCEBkEAAAAAwBABQQAAAABIhApBAAAAAMBcBUEAAAAAAEwNQQAAAADQmxFBAAAAACBlEUEAAAAAGJEVQQAAAACAwARBAAAAAAD1\u002fkAAAAAA8PgLQQAAAAAgZRFBAAAAAAAX8UAAAAAAINYDQQAAAACgTw9BAAAAAECzAUEAAAAAUB8DQQAAAACQZAVBAAAAACCEBkEAAAAAEIQGQQAAAAAAF\u002fFAAAAAAAB47kAAAAAAAGzrQAAAAABg3QdBAAAAAGBnCkEAAAAAYFQJQQAAAACAwARBAAAAAGCKAEEAAAAAQHcLQQAAAAAYkRVBAAAAADS5F0E="},"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","hovertemplate":"cluster=%{x}\u003cbr\u003eannual_salary_midpoint=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2","marker":{"color":"#41B6C4"},"name":"2","notched":false,"offsetgroup":"2","orientation":"v","showlegend":true,"x":["2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAODIEEEAAAAA4MgQQQAAAACg6gpBAAAAAMBcBUEAAAAAQAb5QAAAAADAIA9BAAAAAABc50AAAAAA4MIRQQAAAADAbgJBAAAAABDLD0EAAAAAgNMFQQAAAADA6wJBAAAAALgjFUEAAAAAYB0OQQAAAAAAXOdAAAAAAIC19UAAAAAAAGoIQQAAAABAlQZBAAAAAICcCkEAAAAAgNMFQQAAAADAXAVBAAAAACCdEEEAAAAAwOsCQQAAAAAQyw9BAAAAAICEDkE="},"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","hovertemplate":"cluster=%{x}\u003cbr\u003eannual_salary_midpoint=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"3","marker":{"color":"#A1DAB4"},"name":"3","notched":false,"offsetgroup":"3","orientation":"v","showlegend":true,"x":["3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3","3"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAJDbBkEAAAAAYI0MQQAAAABgjQxBAAAAACBHBkEAAAAAqN0AQQAAAADArwxBAAAAAACw4kAAAAAAALDiQAAAAABAswFBAAAAAECzAUEAAAAAABcBQQAAAADY4wxBAAAAAKAsEEEAAAAAoCwQQQAAAACgnQJBAAAAAMDNB0EAAAAAAPkFQQAAAADAzQdBAAAAAMA+CkEAAAAAwK8MQQAAAAAAsOJAAAAAAECVBkEAAAAAwD4KQQAAAADArwxBAAAAAAD1\u002fkAAAAAAAPX+QAAAAAAA9f5AAAAAACD2BkEAAAAAgMYDQQAAAACgLBBBAAAAAKAsEEEAAAAAgLkBQQAAAACAuQFBAAAAAGC\u002fDEEAAAAAsKsCQQAAAADAzQdBAAAAAMDNB0EAAAAAKKUEQQAAAADgAwxBAAAAAAD5BUEAAAAAgIT+QAAAAAAAqfpAAAAAAPCRFEEAAAAAoJ0CQQ=="},"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","hovertemplate":"cluster=%{x}\u003cbr\u003eannual_salary_midpoint=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"4","marker":{"color":"#FDAE61"},"name":"4","notched":false,"offsetgroup":"4","orientation":"v","showlegend":true,"x":["4","4","4","4","4","4","4","4","4"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAABqCEEAAAAAAGoIQQAAAADAUAdBAAAAABAgFkEAAAAAAGoIQQAAAAAAaghBAAAAAOA5E0EAAAAAECAWQQAAAAAopQRB"},"y0":" ","yaxis":"y","type":"box"},{"alignmentgroup":"True","hovertemplate":"cluster=%{x}\u003cbr\u003eannual_salary_midpoint=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"5","marker":{"color":"#D7191C"},"name":"5","notched":false,"offsetgroup":"5","orientation":"v","showlegend":true,"x":["5","5","5","5","5","5","5","5","5","5","5","5","5","5","5"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAADa9kAAAAAAALoDQQAAAAAAcNxAAAAAAADi6EAAAAAAAHDcQAAAAABA5vVAAAAAAGDn9UAAAAAAANr2QAAAAABg5\u002fVAAAAAAEDm9UAAAAAAYOf1QAAAAACwyhFBAAAAAFBqA0EAAAAAeL8DQQAAAAAgpgtB"},"y0":" ","yaxis":"y","type":"box"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#2C7FB8","#41B6C4","#A1DAB4","#FDAE61","#D7191C"],"font":{"color":"#2a3f5f","family":"Arial","size":14},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Segment"},"categoryorder":"array","categoryarray":["1","2","3","4","5"]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Annual salary midpoint (USD)"}},"legend":{"title":{"text":"cluster"},"tracegroupgap":0},"title":{"text":"Salary distribution by segment"},"boxmode":"overlay","showlegend":false},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('77bfdfa9-ea0b-4c65-8728-37f131eb087c');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p><em>Interpretation: [after rendering, name each segment (for example, “entry-level, lower pay” or “senior, high pay”) using the profile table, and say which one best fits our team.]</em></p>
+</section>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ul>
+<li>The panel is small (about 760 postings), so segments can shift with a different random seed or feature set.</li>
+<li>Salary is the posted range midpoint, not actual pay.</li>
+<li>Clusters describe patterns in postings; they do not say which role is best for any one person.</li>
+</ul>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

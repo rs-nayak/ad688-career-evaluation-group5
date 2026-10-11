@@ -193,7 +193,35 @@
     "href": "ml_methods.html",
     "title": "Predictive Modeling",
     "section": "",
-    "text": "Clustering and machine learning methods will be added here."
+    "text": "This page groups Data Scientist postings in NAICS 5417 into market segments using unsupervised learning (K-Means, with PCA for visualization). The goal is to see what kinds of roles exist in the market so we can compare them with our own skill profiles."
+  },
+  {
+    "objectID": "ml_methods.html#feature-preparation",
+    "href": "ml_methods.html#feature-preparation",
+    "title": "Predictive Modeling",
+    "section": "Feature Preparation",
+    "text": "Feature Preparation\nWe use the cleaned posting panel from the Data Preparation page. Features are salary midpoint, minimum years of experience, the number of listed skills, the number of software skills, and the work arrangement. Postings missing salary or experience are dropped for this model.\n\ndf = pd.read_csv(\"output/career_market_panel.csv\")\n\ndef count_items(x):\n    \"\"\"Skill columns are saved as list-like strings in the CSV.\"\"\"\n    if isinstance(x, (list, tuple)):\n        return len(x)\n    if pd.isna(x):\n        return 0\n    try:\n        v = ast.literal_eval(str(x))\n        return len(v) if isinstance(v, (list, tuple, set)) else 1\n    except (ValueError, SyntaxError):\n        s = str(x).strip(\"[]\")\n        return len([p for p in s.split(\",\") if p.strip()])\n\ndf[\"n_skills\"] = df[\"skills_array\"].apply(count_items)\ndf[\"n_software_skills\"] = df[\"software_skills_array\"].apply(count_items)\n\nnum_cols = [\"annual_salary_midpoint\", \"min_experience_years\", \"n_skills\", \"n_software_skills\"]\nmodel_df = df.dropna(subset=[\"annual_salary_midpoint\", \"min_experience_years\"]).copy()\n\nremote = pd.get_dummies(model_df[\"remote_type_clean\"], prefix=\"work\", dtype=float)\nX = pd.concat([model_df[num_cols].reset_index(drop=True), remote.reset_index(drop=True)], axis=1)\nX_scaled = StandardScaler().fit_transform(X)\n\nprint(f\"Postings used: {len(model_df):,} of {len(df):,}\")\nprint(f\"Features: {list(X.columns)}\")\n\nPostings used: 133 of 760\nFeatures: ['annual_salary_midpoint', 'min_experience_years', 'n_skills', 'n_software_skills', 'work_Hybrid', 'work_Onsite', 'work_Remote', 'work_Unknown']"
+  },
+  {
+    "objectID": "ml_methods.html#choosing-the-number-of-clusters",
+    "href": "ml_methods.html#choosing-the-number-of-clusters",
+    "title": "Predictive Modeling",
+    "section": "Choosing the Number of Clusters",
+    "text": "Choosing the Number of Clusters\nWe fit K-Means for k = 2 to 8 and compare inertia (elbow) and silhouette score.\n\nrows = []\nfor k in range(2, 9):\n    km = KMeans(n_clusters=k, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)\n    rows.append({\"k\": k, \"inertia\": km.inertia_,\n                 \"silhouette\": silhouette_score(X_scaled, km.labels_)})\nk_scores = pd.DataFrame(rows)\n\nfig = px.line(k_scores, x=\"k\", y=\"silhouette\", markers=True,\n              title=\"Silhouette score by number of clusters\")\nfig.update_layout(xaxis_title=\"Number of clusters (k)\", yaxis_title=\"Silhouette score\")\nfig.show()\n\n                            \n                                            \n\n\n\nfig = px.line(k_scores, x=\"k\", y=\"inertia\", markers=True,\n              title=\"Elbow plot: inertia by number of clusters\")\nfig.update_layout(xaxis_title=\"Number of clusters (k)\", yaxis_title=\"Inertia\")\nfig.show()\n\n                            \n                                            \n\n\n\nbest_k = int(k_scores.loc[k_scores[\"silhouette\"].idxmax(), \"k\"])\nprint(f\"Selected k = {best_k} (highest silhouette score)\")\n\nSelected k = 5 (highest silhouette score)\n\n\nInterpretation: [after rendering, add 1-2 sentences on what the elbow and silhouette plots show and why this k was chosen.]"
+  },
+  {
+    "objectID": "ml_methods.html#market-segments",
+    "href": "ml_methods.html#market-segments",
+    "title": "Predictive Modeling",
+    "section": "Market Segments",
+    "text": "Market Segments\n\nkm = KMeans(n_clusters=best_k, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)\nmodel_df[\"cluster\"] = (km.labels_ + 1).astype(str)\n\npca = PCA(n_components=2, random_state=RANDOM_STATE)\ncoords = pca.fit_transform(X_scaled)\nmodel_df[\"PC1\"], model_df[\"PC2\"] = coords[:, 0], coords[:, 1]\nvar = pca.explained_variance_ratio_ * 100\n\nfig = px.scatter(\n    model_df, x=\"PC1\", y=\"PC2\", color=\"cluster\",\n    hover_data=[\"title_clean\", \"company_clean\", \"annual_salary_midpoint\"],\n    title=\"Data Scientist postings by market segment (PCA view)\",\n    category_orders={\"cluster\": sorted(model_df[\"cluster\"].unique())},\n)\nfig.update_layout(xaxis_title=f\"PC1 ({var[0]:.1f}% of variance)\",\n                  yaxis_title=f\"PC2 ({var[1]:.1f}% of variance)\")\nfig.show()\n\n                            \n                                            \n\n\n\nWhat defines each segment\n\nprofile = (\n    model_df.groupby(\"cluster\")\n    .agg(postings=(\"id\", \"count\"),\n         median_salary=(\"annual_salary_midpoint\", \"median\"),\n         median_min_experience=(\"min_experience_years\", \"median\"),\n         avg_skills=(\"n_skills\", \"mean\"),\n         avg_software_skills=(\"n_software_skills\", \"mean\"),\n         pct_remote=(\"remote_type_clean\", lambda s: (s == \"Remote\").mean() * 100))\n    .round(1)\n    .reset_index()\n)\nprofile\n\n\n\n\n\n\n\n\ncluster\npostings\nmedian_salary\nmedian_min_experience\navg_skills\navg_software_skills\npct_remote\n\n\n\n\n0\n1\n40\n192500.0\n0.0\n9.5\n1.8\n0.0\n\n\n1\n2\n25\n200000.0\n0.0\n9.9\n2.5\n100.0\n\n\n2\n3\n44\n183750.0\n1.0\n10.0\n2.1\n0.0\n\n\n3\n4\n9\n200000.0\n0.0\n2.6\n0.0\n0.0\n\n\n4\n5\n15\n89718.0\n0.0\n10.0\n2.3\n0.0\n\n\n\n\n\n\n\n\nfig = px.box(model_df, x=\"cluster\", y=\"annual_salary_midpoint\", color=\"cluster\",\n             category_orders={\"cluster\": sorted(model_df[\"cluster\"].unique())},\n             title=\"Salary distribution by segment\")\nfig.update_layout(xaxis_title=\"Segment\", yaxis_title=\"Annual salary midpoint (USD)\",\n                  showlegend=False)\nfig.show()\n\n                            \n                                            \n\n\nInterpretation: [after rendering, name each segment (for example, “entry-level, lower pay” or “senior, high pay”) using the profile table, and say which one best fits our team.]"
+  },
+  {
+    "objectID": "ml_methods.html#limitations",
+    "href": "ml_methods.html#limitations",
+    "title": "Predictive Modeling",
+    "section": "Limitations",
+    "text": "Limitations\n\nThe panel is small (about 760 postings), so segments can shift with a different random seed or feature set.\nSalary is the posted range midpoint, not actual pay.\nClusters describe patterns in postings; they do not say which role is best for any one person."
   },
   {
     "objectID": "introduction.html",
