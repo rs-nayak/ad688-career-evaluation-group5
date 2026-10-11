@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ai_disclosure – AD688 O1 Fall '26 Career Evaluation Team Project - Group 5</title>
+<title>AI Use Disclosure – AD688 O1 Fall ’26 Career Evaluation Team Project - Group 5</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -147,63 +147,137 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#ai-disclosure-victoria-loukas-group-5" id="toc-ai-disclosure-victoria-loukas-group-5" class="nav-link active" data-scroll-target="#ai-disclosure-victoria-loukas-group-5">AI Disclosure: Victoria Loukas, Group 5</a>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#how-ai-was-used" id="toc-how-ai-was-used" class="nav-link" data-scroll-target="#how-ai-was-used">How AI Was Used</a>
   <ul class="collapse">
-  <li><a href="#tasks-claude-helped-with" id="toc-tasks-claude-helped-with" class="nav-link" data-scroll-target="#tasks-claude-helped-with">Tasks Claude helped with</a></li>
-  <li><a href="#prompts-and-conversation" id="toc-prompts-and-conversation" class="nav-link" data-scroll-target="#prompts-and-conversation">Prompts and conversation</a></li>
-  <li><a href="#validation-steps" id="toc-validation-steps" class="nav-link" data-scroll-target="#validation-steps">Validation steps</a></li>
-  <li><a href="#corrections-made-to-claudes-work" id="toc-corrections-made-to-claudes-work" class="nav-link" data-scroll-target="#corrections-made-to-claudes-work">Corrections made to Claude’s work</a></li>
-  <li><a href="#items-the-team-must-confirm" id="toc-items-the-team-must-confirm" class="nav-link" data-scroll-target="#items-the-team-must-confirm">Items the team must confirm</a></li>
+  <li><a href="#interpreting-the-project-instructions" id="toc-interpreting-the-project-instructions" class="nav-link" data-scroll-target="#interpreting-the-project-instructions">1. Interpreting the project instructions</a></li>
+  <li><a href="#reviewing-our-published-site-against-the-requirements" id="toc-reviewing-our-published-site-against-the-requirements" class="nav-link" data-scroll-target="#reviewing-our-published-site-against-the-requirements">2. Reviewing our published site against the requirements</a></li>
+  <li><a href="#suggesting-an-analytical-approach" id="toc-suggesting-an-analytical-approach" class="nav-link" data-scroll-target="#suggesting-an-analytical-approach">3. Suggesting an analytical approach</a></li>
+  <li><a href="#flagging-potential-issues-for-us-to-check" id="toc-flagging-potential-issues-for-us-to-check" class="nav-link" data-scroll-target="#flagging-potential-issues-for-us-to-check">4. Flagging potential issues for us to check</a></li>
+  <li><a href="#completion-and-planning-checklist" id="toc-completion-and-planning-checklist" class="nav-link" data-scroll-target="#completion-and-planning-checklist">5. Completion and planning checklist</a></li>
   </ul></li>
+  <li><a href="#what-ai-did-not-do" id="toc-what-ai-did-not-do" class="nav-link" data-scroll-target="#what-ai-did-not-do">What AI Did Not Do</a></li>
+  <li><a href="#verification-and-responsibility" id="toc-verification-and-responsibility" class="nav-link" data-scroll-target="#verification-and-responsibility">Verification and Responsibility</a></li>
+  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AI Use Disclosure</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="ai-disclosure-victoria-loukas-group-5" class="level1">
-<h1>AI Disclosure: Victoria Loukas, Group 5</h1>
-<p><strong>Course:</strong> AD688 O1 Fall ’26, Career Evaluation Team Project <strong>Tool and provider:</strong> Claude (Anthropic), used through the Claude app <strong>Dates used:</strong> October 11, 2026</p>
-<section id="tasks-claude-helped-with" class="level2">
-<h2 class="anchored" data-anchor-id="tasks-claude-helped-with">Tasks Claude helped with</h2>
-<ol type="1">
-<li><strong>Predictive Modeling page (<code>ml_methods.qmd</code>).</strong> Claude wrote the K-Means and PCA code, the choice-of-k plots, the segment profile table, and the interpretation text.</li>
-<li><strong>Career Evaluation, Final Recommendations and <code>final_report.qmd</code>.</strong> Claude drafted the text from the team’s Market Baseline, Data Preparation and Predictive Modeling pages.</li>
-<li><strong>Setup help.</strong> Claude walked me through connecting VS Code to the EC2 server, installing packages, and committing to GitHub.</li>
-</ol>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>Our team used a generative AI assistant as a <strong>reviewer and planning aid</strong> during the final stages of this project (Modules 5 and 6). It did <strong>not</strong> generate our data, run our analyses, or write the content of our analytical pages. Every finding, table, and figure on this site was produced by team members from our own code and our cleaned dataset (<code>output/career_market_panel.csv</code>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 78%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Item</strong></th>
+<th><strong>Detail</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tool</td>
+<td>Claude (Anthropic), Claude Opus 5.5, via the claude.ai web app</td>
+</tr>
+<tr class="even">
+<td>Date(s) of use</td>
+<td>October 11, 2026</td>
+</tr>
+<tr class="odd">
+<td>Used by</td>
+<td>Victoria Loukas</td>
+</tr>
+<tr class="even">
+<td>Project stage</td>
+<td>Module 5 (final analytics and report) and Module 6 (presentation)</td>
+</tr>
+<tr class="odd">
+<td>Data shared</td>
+<td>Course instructions (pasted text) and our public GitHub Pages URL</td>
+</tr>
+<tr class="even">
+<td>Data <strong>not</strong> shared</td>
+<td>Our API key, <code>.env</code> file, raw parquet files, or private data</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="prompts-and-conversation" class="level2">
-<h2 class="anchored" data-anchor-id="prompts-and-conversation">Prompts and conversation</h2>
-<p><em>[Attach or link the full conversation here. The course requires complete prompts and, where supported, a shared conversation link.]</em></p>
+<section id="how-ai-was-used" class="level2">
+<h2 class="anchored" data-anchor-id="how-ai-was-used">How AI Was Used</h2>
+<section id="interpreting-the-project-instructions" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-project-instructions">1. Interpreting the project instructions</h3>
+<p>We pasted the Module 5 instructions (Step 4, final analytics, and report) and the Module 6 instructions (final presentation and team assessment) into the assistant. We asked it to summarize the requirements: the three acceptable analytics tracks (regression, classification, segmentation/ranking), the five interpretation elements each analytical section needs, the seven required report sections, and the presentation flow and evidence slides.</p>
 </section>
-<section id="validation-steps" class="level2">
-<h2 class="anchored" data-anchor-id="validation-steps">Validation steps</h2>
+<section id="reviewing-our-published-site-against-the-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="reviewing-our-published-site-against-the-requirements">2. Reviewing our published site against the requirements</h3>
+<p>We shared the URL of our GitHub Pages site. The assistant read our published pages (Home, Data Preparation, Market Baseline, Skill Gap Analysis, Predictive Modeling, Career Evaluation, and Final Recommendations) and compared them with the checklists. It noted which requirements appeared complete and which pages were still placeholders.</p>
+</section>
+<section id="suggesting-an-analytical-approach" class="level3">
+<h3 class="anchored" data-anchor-id="suggesting-an-analytical-approach">3. Suggesting an analytical approach</h3>
+<p>The assistant pointed out that only 240 of our 760 postings (31.6%) have usable salary data, while skills coverage is 96.4%. It suggested centering our final analytics on skills, consistent with our product question. Specifically, it proposed:</p>
 <ul>
-<li>I ran the clustering code on the real data on my EC2 instance and compared the output with the rendered website page. Segment sizes (261, 170, 150, 128, 51), salary medians and percentages matched the text.</li>
-<li>I checked how many postings had salary (240) and experience (503) before deciding how to handle missing values.</li>
-<li>Numbers in the recommendations and report were taken from the team’s Market Baseline and Data Preparation pages.</li>
+<li>a skill opportunity <strong>scorecard</strong> (Option C), combining demand share, salary premium, and accessibility (share of entry-level postings), with justified weights and a sensitivity check; and</li>
+<li>a supporting <strong>high-salary classifier</strong> (Option B), using logistic regression on the salaried subset, evaluated with accuracy, precision/recall, F1, and a confusion matrix.</li>
+</ul>
+<p>The team did not adopt the scorecard or the classifier. We used K-Means segmentation (Option C) on all 760 postings instead, because it uses every posting and does not depend on salary, which is listed on only 31.6% of postings.</p>
+</section>
+<section id="flagging-potential-issues-for-us-to-check" class="level3">
+<h3 class="anchored" data-anchor-id="flagging-potential-issues-for-us-to-check">4. Flagging potential issues for us to check</h3>
+<p>The assistant raised two issues for the team to investigate. We verified both ourselves.</p>
+<ul>
+<li><strong>Skill-gap scaling.</strong> Our method set the most-demanded skill to level 5 and scaled the others proportionally. This produced a required level below 1 for most skills, so nearly every skill showed a gap of zero. We have not changed the scaling yet. The self-ratings on that page are also still marked as placeholders in the code, so both need to be confirmed by the team before we submit.</li>
+<li><strong>Experience field.</strong> 339 postings (44.6%) list a 0-year minimum. That may reflect a source default rather than a true entry-level requirement. We checked the Data Preparation page: missing experience was labeled “Not specified,” not 0, so the 339 postings are ones that list 0 years. We cannot tell from the data whether some of those are source defaults.</li>
 </ul>
 </section>
-<section id="corrections-made-to-claudes-work" class="level2">
-<h2 class="anchored" data-anchor-id="corrections-made-to-claudes-work">Corrections made to Claude’s work</h2>
+<section id="completion-and-planning-checklist" class="level3">
+<h3 class="anchored" data-anchor-id="completion-and-planning-checklist">5. Completion and planning checklist</h3>
+<p>The assistant gave us a prioritized to-do list for finishing the project. That list covered completing the analytics and Career Evaluation pages, writing recommendations and limitations, creating <code>final_report.qmd</code>, building the slide deck, and documenting team contributions. We used it to plan our final work and standups.</p>
+<!-- EDIT: add sections here for any later AI use, e.g. help debugging code, drafting text, or slide outlines. Be specific about what was AI-assisted and what the team changed. -->
+</section>
+</section>
+<section id="what-ai-did-not-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-ai-did-not-do">What AI Did Not Do</h2>
 <ul>
-<li>The first version dropped postings missing salary or experience, which left only 133 of 760. We changed it to keep all 760 and compare salary afterward.</li>
-<li>Claude’s first approach picked k by highest silhouette score, which just selected the largest k tested (8). We fixed k = 5 and said so on the page.</li>
-<li>Claude’s first interpretation text was written before the final data was run and was replaced with text matching the real output.</li>
+<li>It did not access, download, or process our dataset.</li>
+<li>It did not produce any of the numbers, tables, or figures on this site. All results come from our own code.</li>
+<li>It did not write the analytical text on the Data Preparation, Market Baseline, or Skill Gap Analysis pages, which were completed before this use.</li>
+<li>It did not decide our scope, career pathway, industry, or recommendations.</li>
 </ul>
 </section>
-<section id="items-the-team-must-confirm" class="level2">
-<h2 class="anchored" data-anchor-id="items-the-team-must-confirm">Items the team must confirm</h2>
-<ul>
-<li>The self-ratings on the Skill Gap Analysis page are marked as placeholders in the code and need to be the team’s real ratings.</li>
-<li>The Exploratory Analysis page loads a different, larger dataset (<code>data/jobs.csv</code>) than the 760-posting panel used elsewhere.</li>
-</ul>
-
-
+<section id="verification-and-responsibility" class="level2">
+<h2 class="anchored" data-anchor-id="verification-and-responsibility">Verification and Responsibility</h2>
+<p>We treated every AI suggestion as a recommendation to evaluate, not as a fact. We checked the claims it made about our site against our own pages and code. The team is fully responsible for the accuracy, interpretation, and conclusions presented in this project.</p>
 </section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p>Anthropic. (2026). <em>Claude</em> (Claude Opus 5.5) [Large language model]. https://claude.ai</p>
+<p>Full conversation transcript (October 11, 2026): <a href="https://claude.ai/share/114cb123-50dd-4994-805c-b3a4f1b1898f" class="uri">https://claude.ai/share/114cb123-50dd-4994-805c-b3a4f1b1898f</a></p>
+
+
 </section>
 
 </main> <!-- /main -->
