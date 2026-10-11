@@ -403,7 +403,14 @@
     "href": "introduction.html#literature-review",
     "title": "Introduction",
     "section": "Literature Review",
-    "text": "Literature Review"
+    "text": "Literature Review\n\nIndustry Spotlight - Scientific Research and Development Services Industry Profile\nThis report gives an outline of employment prospectives for individuals in Scientific Research and Development Services roles. The report gives employment statistics, wage statistics, regional variations, and growth potential. It shows wage growth increasing while overall employments slows down, it shows the sector with the highest employment being “Management, Scientific, and Technical Consulting Services” and the sector with the highest wages being “Scientific Research and Development Services.” (Chmura Economics & Analytics 2023)\n\n\nBridging digital skill gaps in the global workforce: A synthesis and conceptual framework building\nThis article discusses skill gaps in the global workforce with an emphasis on the lack of digital capabilities. The article shows the measurable gaps in digital skills such as digital tools and applications, and data analysis with the available workforce that is hampering productivity in the global economy. The paper recommends national digital skilling initiatives that are inclusive to all demographics. (Mhaske et al. 2025)\n\n\nResearcher of the Future: 6 skills for a scientific career\nThis article breaks down the skills needed for the future of research roles. The top skills emphasized by the author are strategic thinking, interdisciplinary functionality, data and AI, project management, and continuous learning. From this article the emphasis and data and AI for researchers in the future is a mandatory requirement that anyone looking to get into R&D will need if they wish to be successful in these fields. (Ribas 2026)"
+  },
+  {
+    "objectID": "introduction.html#references",
+    "href": "introduction.html#references",
+    "title": "Introduction",
+    "section": "References",
+    "text": "References\n\n\nChmura Economics & Analytics. 2023. Industry Spotlight: Scientific Research and Development Services Industry Profile (NAICS 5413, 5415, 5416, 5417, 5419). Chmura Economics & Analytics. https://www.seguinedc.com/media/userfiles/subsite_89/files/Industry%20Profiles/Industry%20Spotlight%20-%20Scientific%20Research%20and%20Development%20Services%20Industry%20Profile%20(NAICS_%205413%2C%205415%2C%205416%2C%205417%2C%205419)%2C%20Seguin%20Zip%20Codes.pdf.\n\n\nMhaske, Pravin, Biplab Bhattacharjee, Nivedita Haldar, Parijat Upadhyay, and Anandadeep Mandal. 2025. “Bridging Digital Skill Gaps in the Global Workforce: A Synthesis and Conceptual Framework Building.” Research in Globalization, 100311. https://www.sciencedirect.com/science/article/pii/S2590051X25000449.\n\n\nRibas, Jacqueline. 2026. “Researcher of the Future: 6 Skills for a Scientific Career.” Science Arena, August. https://www.sciencearena.org/en/video/researcher-of-the-future-6-skills-for-a-scientific-career/."
   },
   {
     "objectID": "data_preparation_and_market_baseline.html",

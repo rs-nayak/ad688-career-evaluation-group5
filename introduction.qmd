@@ -32,4 +32,26 @@ By focusing on **Scientific Research and Development Services (NAICS 5417)**, we
 
 Our analysis will identify the skills and software tools that appear most frequently in these job postings. Later in the project, we can use these results as a benchmark for the Skill Gap Analysis and Career Evaluation.
 
+
 ## Literature Review
+
+### Industry Spotlight - Scientific Research and Development Services Industry Profile
+
+This report gives an outline of employment prospectives for individuals in Scientific Research and Development Services roles. The report gives employment statistics, wage statistics, regional variations, and growth potential.
+It shows wage growth increasing while overall employments slows down, it shows the sector with the highest employment being "Management, Scientific, and Technical Consulting Services" and the sector with the highest wages being 
+"Scientific Research and Development Services." [@chmura2023industry]
+
+### Bridging digital skill gaps in the global workforce: A synthesis and conceptual framework building
+
+This article discusses skill gaps in the global workforce with an emphasis on the lack of digital capabilities. The article shows the measurable gaps in digital skills such as digital tools and applications, and data analysis with the 
+available workforce that is hampering productivity in the global economy. The paper recommends national digital skilling initiatives that are inclusive to all demographics. [@mhaske2025skills]
+
+### Researcher of the Future: 6 skills for a scientific career
+
+This article breaks down the skills needed for the future of research roles. The top skills emphasized by the author are strategic thinking, interdisciplinary functionality, data and AI, project management, and continuous learning. From this article the 
+emphasis and data and AI for researchers in the future is a mandatory requirement that anyone looking to get into R&D will need if they wish to be successful in these fields. [@ribas2026researcher]
+
+## References
+
+::: {#refs}
+:::
