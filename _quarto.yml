@@ -14,10 +14,8 @@ website:
         text: "Introduction"
       - href: data_preparation.qmd
         text: "Data Preparation"
-      - href: market_baseline.qmd
-        text: "Market Baseline"
       - href: eda.qmd
-        text: "Exploratory Analysis"
+        text: "Exploratory Analysis & Market Baseline"
       - href: skill_gap_analysis.qmd
         text: "Skill Gap Analysis"
       - href: ml_methods.qmd
