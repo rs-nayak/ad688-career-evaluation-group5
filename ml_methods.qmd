@@ -3,7 +3,7 @@ title: "Predictive Modeling"
 jupyter: python3
 ---
 
-This page groups Data Scientist postings in NAICS 5417 into market segments using **unsupervised learning** (K-Means, with PCA for visualization). The goal is to see what kinds of roles exist in the market so we can compare them with our own skill profiles.
+This page groups all Data Scientist postings in NAICS 5417 into market segments using **unsupervised learning** (K-Means, with PCA for visualization). The goal is to see what kinds of postings exist in the market so we can compare them with our own skill profiles.
 
 ```{python}
 #| echo: false
@@ -19,11 +19,12 @@ from sklearn.metrics import silhouette_score
 import theme  # course Plotly template
 
 RANDOM_STATE = 42
+K = 5
 ```
 
 ## Feature Preparation
 
-We use the cleaned posting panel from the Data Preparation page. Features are salary midpoint, minimum years of experience, the number of listed skills, the number of software skills, and the work arrangement. Postings missing salary or experience are dropped for this model.
+We use the cleaned posting panel from the Data Preparation page and keep **all postings**. Salary is listed on only about a third of them, so it is **not** used to form the segments. Instead, segments are built from minimum years of experience, the number of listed skills, the number of software skills, and the work arrangement. Where minimum experience is missing, we fill it with the median and add a flag for "experience listed," so those postings stay in the model. Salary is then compared across segments, using only the postings that list it.
 
 ```{python}
 df = pd.read_csv("output/career_market_panel.csv")
@@ -43,15 +44,17 @@ def count_items(x):
 
 df["n_skills"] = df["skills_array"].apply(count_items)
 df["n_software_skills"] = df["software_skills_array"].apply(count_items)
+df["exp_listed"] = df["min_experience_years"].notna().astype(float)
+df["exp_filled"] = df["min_experience_years"].fillna(df["min_experience_years"].median())
+df["remote_type_clean"] = df["remote_type_clean"].fillna("Unknown")
 
-num_cols = ["annual_salary_midpoint", "min_experience_years", "n_skills", "n_software_skills"]
-model_df = df.dropna(subset=["annual_salary_midpoint", "min_experience_years"]).copy()
-
-remote = pd.get_dummies(model_df["remote_type_clean"], prefix="work", dtype=float)
-X = pd.concat([model_df[num_cols].reset_index(drop=True), remote.reset_index(drop=True)], axis=1)
+work = pd.get_dummies(df["remote_type_clean"], prefix="work", dtype=float)
+X = pd.concat([df[["exp_filled", "exp_listed", "n_skills", "n_software_skills"]], work], axis=1)
 X_scaled = StandardScaler().fit_transform(X)
 
-print(f"Postings used: {len(model_df):,} of {len(df):,}")
+print(f"Postings used: {len(df):,} (all of them)")
+print(f"Postings listing a salary: {df['annual_salary_midpoint'].notna().sum():,}")
+print(f"Postings listing minimum experience: {int(df['exp_listed'].sum()):,}")
 print(f"Features: {list(X.columns)}")
 ```
 
@@ -80,29 +83,28 @@ fig.update_layout(xaxis_title="Number of clusters (k)", yaxis_title="Inertia")
 fig.show()
 ```
 
-```{python}
-best_k = int(k_scores.loc[k_scores["silhouette"].idxmax(), "k"])
-print(f"Selected k = {best_k} (highest silhouette score)")
-```
-
-*Interpretation: The silhouette score was highest at k = 5, so we used five segments. With only 133 postings, the clusters are a rough guide and could change with different features.*
+*Interpretation: The silhouette score keeps rising from k = 2 to k = 8 (about 0.28 to 0.48) and never peaks, and the elbow plot has no sharp bend, so the data do not point to one "correct" k. We fixed k = 5 because it gives five segments that are large enough and different enough to describe, with a silhouette score of about 0.40. This is a judgment call, not a statistical optimum.*
 
 ## Market Segments
 
+Segments are numbered from largest (1) to smallest (5), so the numbering stays the same if the model is rerun.
+
 ```{python}
-km = KMeans(n_clusters=best_k, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)
-model_df["cluster"] = (km.labels_ + 1).astype(str)
+km = KMeans(n_clusters=K, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)
+df["cluster"] = km.labels_
+order = df.groupby("cluster").size().sort_values(ascending=False).index
+df["segment"] = df["cluster"].map({old: str(i + 1) for i, old in enumerate(order)})
 
 pca = PCA(n_components=2, random_state=RANDOM_STATE)
 coords = pca.fit_transform(X_scaled)
-model_df["PC1"], model_df["PC2"] = coords[:, 0], coords[:, 1]
+df["PC1"], df["PC2"] = coords[:, 0], coords[:, 1]
 var = pca.explained_variance_ratio_ * 100
 
 fig = px.scatter(
-    model_df, x="PC1", y="PC2", color="cluster",
-    hover_data=["title_clean", "company_clean", "annual_salary_midpoint"],
+    df, x="PC1", y="PC2", color="segment",
+    hover_data=["title_clean", "company_clean", "remote_type_clean"],
     title="Data Scientist postings by market segment (PCA view)",
-    category_orders={"cluster": sorted(model_df["cluster"].unique())},
+    category_orders={"segment": sorted(df["segment"].unique())},
 )
 fig.update_layout(xaxis_title=f"PC1 ({var[0]:.1f}% of variance)",
                   yaxis_title=f"PC2 ({var[1]:.1f}% of variance)")
@@ -113,33 +115,44 @@ fig.show()
 
 ```{python}
 profile = (
-    model_df.groupby("cluster")
+    df.groupby("segment")
     .agg(postings=("id", "count"),
+         with_salary=("annual_salary_midpoint", "count"),
          median_salary=("annual_salary_midpoint", "median"),
-         median_min_experience=("min_experience_years", "median"),
+         pct_exp_listed=("exp_listed", lambda s: s.mean() * 100),
+         median_min_exp=("min_experience_years", "median"),
          avg_skills=("n_skills", "mean"),
          avg_software_skills=("n_software_skills", "mean"),
-         pct_remote=("remote_type_clean", lambda s: (s == "Remote").mean() * 100))
+         pct_remote=("remote_type_clean", lambda s: (s == "Remote").mean() * 100),
+         pct_hybrid=("remote_type_clean", lambda s: (s == "Hybrid").mean() * 100),
+         pct_onsite=("remote_type_clean", lambda s: (s == "Onsite").mean() * 100),
+         pct_unknown=("remote_type_clean", lambda s: (s == "Unknown").mean() * 100))
     .round(1)
     .reset_index()
 )
 profile
 ```
 
+### Salary by segment
+
+Salary is shown only for postings that list it, so each box rests on far fewer postings than the segment size above.
+
 ```{python}
-fig = px.box(model_df, x="cluster", y="annual_salary_midpoint", color="cluster",
-             category_orders={"cluster": sorted(model_df["cluster"].unique())},
-             title="Salary distribution by segment")
+sal = df.dropna(subset=["annual_salary_midpoint"])
+fig = px.box(sal, x="segment", y="annual_salary_midpoint", color="segment",
+             category_orders={"segment": sorted(df["segment"].unique())},
+             title="Salary distribution by segment (postings that list a salary)")
 fig.update_layout(xaxis_title="Segment", yaxis_title="Annual salary midpoint (USD)",
                   showlegend=False)
 fig.show()
 ```
 
-*Interpretation: Segment 1 (40 postings) is high-pay, on-site roles, with a median salary of about $192K and about 9.5 listed skills. Segment 2 (25 postings) is high-pay remote roles, the only fully remote group, at about $200K. Segment 3 (44 postings) is the largest group: high-pay roles asking for about one year of experience, at about $184K. Segment 4 (9 postings) is short postings that list few skills and no software skills, so it says little about what the work requires. Segment 5 (15 postings) is the lower-pay group, at about $90K, with a full skill list. For a team early in their careers, Segments 1 and 2 stand out: median minimum experience is 0 years and pay is high, and Segment 2 is the only remote option.*
+*Interpretation: The segments are shaped mostly by how a posting states its work arrangement and whether it lists experience, not only by the type of role. Segment 1 (261 postings) does not state a work arrangement, always lists experience (median 0 years), and has shorter skill lists (about 6.8 skills); its median salary is about $200K. Segment 2 (170) is all hybrid, at about $186K. Segment 3 (150) is all remote, at about $187K. Segment 4 (128) does not state a work arrangement and almost never lists experience, but has full skill lists (about 9.8), at about $200K. Segment 5 (51) is all on-site and is the lowest paying, at about $126K. For an early-career team, Segment 1 is the clearest fit because every posting lists experience and the median requirement is 0 years, and Segment 3 is the remote option at a similar pay level to the hybrid group.*
 
 ## Limitations
 
-- Only 133 of the 760 postings had both salary and minimum experience, so segments rest on a small sample and can shift with a different random seed or feature set.
+- Salary is listed on only 240 of the 760 postings, and each segment's salary figures rest on 20 to 58 of them, so small differences between segments are not reliable.
+- Missing minimum experience was filled with the median and flagged, so the experience values for those postings are not real data.
+- The choice of k = 5 was a judgment call, because the silhouette score did not peak.
 - Salary is the posted range midpoint, not actual pay.
-- Postings with no stated experience may be recorded as 0 years, which can make roles look more entry-level than they are.
 - Clusters describe patterns in postings; they do not say which role is best for any one person.
