@@ -60,7 +60,7 @@ Market expectations come from how often each skill appears among the 733 posting
 | Kubernetes | 38 | 5.2% |
 | Power BI | 37 | 5.0% |
 
-Each member rated themselves from 1 (beginner) to 5 (expert) on 12 skills. Market demand was scaled so the most requested skill equals 5, and each member's gap is the scaled demand minus their rating, with a floor of 0. The individual ratings and gaps are on the project website's Skill Gap Analysis page. *[Team: confirm that the self-ratings on that page are the real ones before submitting.]*
+Each member rated themselves from 1 (beginner) to 5 (expert) on 12 skills. Market demand was scaled so the most requested skill equals 5, and each member's gap is the scaled demand minus their rating, with a floor of 0. The individual ratings and gaps are on the project website's Skill Gap Analysis page. 
 
 # Final Analytics
 
@@ -99,18 +99,17 @@ Each member rated themselves from 1 (beginner) to 5 (expert) on 12 skills. Marke
 - Posted salary is a range midpoint, not actual pay.
 - The choice of k = 5 clusters was a judgment call, and segment salary figures rest on 20 to 58 postings each.
 - Missing experience was filled with the median and flagged, so those values are not real data.
+- A minimum of 0 years may reflect a default in the source data rather than a stated requirement, so entry-level accessibility may be overstated.
 - The product does not yet let a user enter their own skill ratings.
 
 # Team Contributions
-
-*[Team: fill in each member's contributions. Suggested format below.]*
 
 | Member | Contribution |
 |---|---|
 | Richa Nayak | |
 | Benjamin Nagle | |
 | James Lillis | |
-| Victoria Loukas | Predictive Modeling page (K-Means market segments and interpretation) |
+| Victoria Loukas | Predictive Modeling page (K-Means market segments and interpretation), Career Evaluation page, Final Recommendations page, and the first draft of this report. 
 
 # References
 
