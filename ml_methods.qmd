@@ -1,5 +1,144 @@
 ---
 title: "Predictive Modeling"
+jupyter: python3
 ---
 
-Clustering and machine learning methods will be added here.
+This page groups Data Scientist postings in NAICS 5417 into market segments using **unsupervised learning** (K-Means, with PCA for visualization). The goal is to see what kinds of roles exist in the market so we can compare them with our own skill profiles.
+
+```{python}
+#| echo: false
+import ast
+import numpy as np
+import pandas as pd
+import plotly.express as px
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+
+import theme  # course Plotly template
+
+RANDOM_STATE = 42
+```
+
+## Feature Preparation
+
+We use the cleaned posting panel from the Data Preparation page. Features are salary midpoint, minimum years of experience, the number of listed skills, the number of software skills, and the work arrangement. Postings missing salary or experience are dropped for this model.
+
+```{python}
+df = pd.read_csv("output/career_market_panel.csv")
+
+def count_items(x):
+    """Skill columns are saved as list-like strings in the CSV."""
+    if isinstance(x, (list, tuple)):
+        return len(x)
+    if pd.isna(x):
+        return 0
+    try:
+        v = ast.literal_eval(str(x))
+        return len(v) if isinstance(v, (list, tuple, set)) else 1
+    except (ValueError, SyntaxError):
+        s = str(x).strip("[]")
+        return len([p for p in s.split(",") if p.strip()])
+
+df["n_skills"] = df["skills_array"].apply(count_items)
+df["n_software_skills"] = df["software_skills_array"].apply(count_items)
+
+num_cols = ["annual_salary_midpoint", "min_experience_years", "n_skills", "n_software_skills"]
+model_df = df.dropna(subset=["annual_salary_midpoint", "min_experience_years"]).copy()
+
+remote = pd.get_dummies(model_df["remote_type_clean"], prefix="work", dtype=float)
+X = pd.concat([model_df[num_cols].reset_index(drop=True), remote.reset_index(drop=True)], axis=1)
+X_scaled = StandardScaler().fit_transform(X)
+
+print(f"Postings used: {len(model_df):,} of {len(df):,}")
+print(f"Features: {list(X.columns)}")
+```
+
+## Choosing the Number of Clusters
+
+We fit K-Means for k = 2 to 8 and compare inertia (elbow) and silhouette score.
+
+```{python}
+rows = []
+for k in range(2, 9):
+    km = KMeans(n_clusters=k, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)
+    rows.append({"k": k, "inertia": km.inertia_,
+                 "silhouette": silhouette_score(X_scaled, km.labels_)})
+k_scores = pd.DataFrame(rows)
+
+fig = px.line(k_scores, x="k", y="silhouette", markers=True,
+              title="Silhouette score by number of clusters")
+fig.update_layout(xaxis_title="Number of clusters (k)", yaxis_title="Silhouette score")
+fig.show()
+```
+
+```{python}
+fig = px.line(k_scores, x="k", y="inertia", markers=True,
+              title="Elbow plot: inertia by number of clusters")
+fig.update_layout(xaxis_title="Number of clusters (k)", yaxis_title="Inertia")
+fig.show()
+```
+
+```{python}
+best_k = int(k_scores.loc[k_scores["silhouette"].idxmax(), "k"])
+print(f"Selected k = {best_k} (highest silhouette score)")
+```
+
+*Interpretation: [after rendering, add 1-2 sentences on what the elbow and silhouette plots show and why this k was chosen.]*
+
+## Market Segments
+
+```{python}
+km = KMeans(n_clusters=best_k, n_init=10, random_state=RANDOM_STATE).fit(X_scaled)
+model_df["cluster"] = (km.labels_ + 1).astype(str)
+
+pca = PCA(n_components=2, random_state=RANDOM_STATE)
+coords = pca.fit_transform(X_scaled)
+model_df["PC1"], model_df["PC2"] = coords[:, 0], coords[:, 1]
+var = pca.explained_variance_ratio_ * 100
+
+fig = px.scatter(
+    model_df, x="PC1", y="PC2", color="cluster",
+    hover_data=["title_clean", "company_clean", "annual_salary_midpoint"],
+    title="Data Scientist postings by market segment (PCA view)",
+    category_orders={"cluster": sorted(model_df["cluster"].unique())},
+)
+fig.update_layout(xaxis_title=f"PC1 ({var[0]:.1f}% of variance)",
+                  yaxis_title=f"PC2 ({var[1]:.1f}% of variance)")
+fig.show()
+```
+
+### What defines each segment
+
+```{python}
+profile = (
+    model_df.groupby("cluster")
+    .agg(postings=("id", "count"),
+         median_salary=("annual_salary_midpoint", "median"),
+         median_min_experience=("min_experience_years", "median"),
+         avg_skills=("n_skills", "mean"),
+         avg_software_skills=("n_software_skills", "mean"),
+         pct_remote=("remote_type_clean", lambda s: (s == "Remote").mean() * 100))
+    .round(1)
+    .reset_index()
+)
+profile
+```
+
+```{python}
+fig = px.box(model_df, x="cluster", y="annual_salary_midpoint", color="cluster",
+             category_orders={"cluster": sorted(model_df["cluster"].unique())},
+             title="Salary distribution by segment")
+fig.update_layout(xaxis_title="Segment", yaxis_title="Annual salary midpoint (USD)",
+                  showlegend=False)
+fig.show()
+```
+
+*Interpretation: [after rendering, name each segment (for example, "entry-level, lower pay" or "senior, high pay") using the profile table, and say which one best fits our team.]*
+
+## Limitations
+
+- The panel is small (about 760 postings), so segments can shift with a different random seed or feature set.
+- Salary is the posted range midpoint, not actual pay.
+- Clusters describe patterns in postings; they do not say which role is best for any one person.
