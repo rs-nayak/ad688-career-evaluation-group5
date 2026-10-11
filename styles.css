@@ -1,1 +1,6 @@
 /* css styles */
+/* Prevent long reference URLs from overflowing */
+#refs a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
