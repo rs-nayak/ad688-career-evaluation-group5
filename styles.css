@@ -1,6 +1,22 @@
 /* css styles */
-/* Prevent long reference URLs from overflowing */
-#refs a {
+
+/* Fix long URLs in Quarto references */
+#refs .csl-entry {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  max-width: 100%;
+}
+
+/* Make long reference links wrap */
+#refs .csl-entry a {
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+  white-space: normal !important;
+}
+
+/* Prevent bibliography from stretching page */
+#refs {
+  max-width: 100%;
+  min-width: 0;
   overflow-wrap: anywhere;
-  word-break: break-word;
 }
