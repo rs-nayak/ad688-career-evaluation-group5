@@ -149,6 +149,14 @@ fig.show()
 
 *Interpretation: The segments are shaped mostly by how a posting states its work arrangement and whether it lists experience, not only by the type of role. Segment 1 (261 postings) does not state a work arrangement, always lists experience (median 0 years), and has shorter skill lists (about 6.8 skills); its median salary is about $200K. Segment 2 (170) is all hybrid, at about $186K. Segment 3 (150) is all remote, at about $187K. Segment 4 (128) does not state a work arrangement and almost never lists experience, but has full skill lists (about 9.8), at about $200K. Segment 5 (51) is all on-site and is the lowest paying, at about $126K. For an early-career team, Segment 1 is the clearest fit because every posting lists experience and the median requirement is 0 years, and Segment 3 is the remote option at a similar pay level to the hybrid group.*
 
+## What This Analysis Means for a Job Seeker
+
+- **What was modeled:** All 760 Data Scientist postings in NAICS 5417 were grouped into five segments with K-Means, so a job seeker can see what kinds of postings the market offers.
+- **Why it matters:** The segments show how work arrangement, experience requirements and listed pay differ across the market, which helps a candidate decide where to apply first.
+- **Variables used:** Minimum years of experience (with a flag for postings that do not list it), number of listed skills, number of software skills, and work arrangement. Salary was left out of the grouping because only 240 of 760 postings list it, and is compared across segments afterward.
+- **How it was evaluated:** There is no single correct answer to compare against, so we used the silhouette score (about 0.40 at k = 5), the elbow plot, and a profile table checking that each segment is distinct and large enough to describe.
+- **What it means in practical terms:** In this sample, postings that list experience at 0 years (Segment 1) and remote postings (Segment 3) look most accessible to an early-career applicant. On-site postings that list a salary pay noticeably less (about $126K, from only 20 postings). Applicants should treat these as starting points to check against the posting itself, not guarantees.
+
 ## Limitations
 
 - Salary is listed on only 240 of the 760 postings, and each segment's salary figures rest on 20 to 58 of them, so small differences between segments are not reliable.
