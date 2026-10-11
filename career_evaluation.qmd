@@ -1,3 +1,48 @@
 ---
 title: "Career Evaluation"
 ---
+
+This page explains how a job seeker can use our analysis to judge a Data Scientist posting in Scientific Research and Development Services (NAICS 5417). It combines the market baseline, the skill-gap comparison and the market segments from the Predictive Modeling page. All figures come from the 760 postings in our cleaned panel (January 6 to August 23, 2026).
+
+## What We Evaluate
+
+A posting is worth pursuing if it is **accessible** (the experience it asks for matches where you are), **fair** (the pay is in a realistic range), **flexible** (the work arrangement suits you), and **a skills match** (you can close the gap to what it asks for). We judge each of these from the evidence below instead of combining them into one invented score, because the data is incomplete: salary is listed on 31.6% of postings and work arrangement on 48.8%.
+
+## Evaluation Criteria and Evidence
+
+| Question for a job seeker | Evidence from our data | What it means |
+|---|---|---|
+| Can I qualify? | Of the 503 postings that list minimum experience, 339 (67.4%) ask for 0 years. Only 16 ask for 10 or more years. | Early-career applicants can reasonably apply to a large share of postings. |
+| What pay is realistic? | Median posted salary midpoint is $187,675 (240 postings with a salary). | Use this as a rough guide. Two thirds of postings do not list pay, so ask for it. |
+| Can I work remotely? | Of 371 postings that state an arrangement, 170 are hybrid, 150 are remote and 51 are on-site (86.3% hybrid or remote). | Flexible arrangements are common among postings that say. |
+| Which skills should I build? | Python appears in 56.8% of postings that list skills (416 of 733), machine learning in 38.3%, SQL in 26.9%. | Python, machine learning and SQL come first. |
+| Where are the jobs? | Known-state postings: California 136, New York 75, Virginia 37, Massachusetts 33, District of Columbia 29. | Coastal hubs lead, but 264 postings have no state. |
+
+## Market Segments for Decision-Making
+
+The Predictive Modeling page groups all 760 postings into five segments. Pay figures use only postings that list a salary, shown in the last column.
+
+| Segment | Postings | Work arrangement | Experience listed | Median salary | Postings with salary |
+|---|---|---|---|---|---|
+| 1 | 261 | Not stated | 100% (median 0 years) | about $200,000 | 49 |
+| 2 | 170 | Hybrid | 67.6% (median 1 year) | about $186,000 | 58 |
+| 3 | 150 | Remote | 60.0% (median 0 years) | about $187,000 | 56 |
+| 4 | 128 | Not stated | 2.3% | about $200,500 | 57 |
+| 5 | 51 | On-site | 66.7% (median 0 years) | about $126,000 | 20 |
+
+**How to read this.** Segment 1 is the clearest entry-level signal, because every posting lists experience and the median requirement is 0 years. Segment 3 is the remote option, and Segment 2 the hybrid one. Segment 5 is on-site and lowest paying in this sample, but it rests on only 20 salaries. Segment 4 does not state experience, so a job seeker should read the full posting before judging it.
+
+## Connecting to Our Skill-Gap Analysis
+
+The Skill Gap Analysis page compares each team member's self-rated skills with how often 12 skills appear in these postings. The skills most in demand in our data (Python, machine learning, SQL) are the ones to close first. A job seeker can repeat the same exercise: rate yourself from 1 to 5 on each skill, scale the market demand to the same range, and treat the largest positive differences as your priorities.
+
+## How to Use This as a Checklist
+
+1. Check the experience requirement. If it is 0 to 2 years, you are in range.
+2. Look for a stated salary and work arrangement. If either is missing, ask before investing time.
+3. Compare the required skills with your own. Close gaps in Python, machine learning and SQL first.
+4. Look beyond the title "Data Scientist." Postings also appear as Machine Learning Engineer and AI Engineer.
+
+## Limits of This Evaluation
+
+The dataset is a selected sample, not every U.S. opening. Salary, state and work arrangement are missing on many postings, and posted salary is a range midpoint, not actual pay. The segments describe patterns in postings and do not rank jobs for any one person.

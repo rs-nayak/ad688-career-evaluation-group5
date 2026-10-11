@@ -1,0 +1,121 @@
+---
+title: "Career Evaluation Product: Data Scientists in Scientific Research and Development Services (NAICS 5417)"
+subtitle: "AD688 O1 Fall '26 Team Project, Group 5"
+author: "Richa Nayak, Benjamin Nagle, James Lillis, Victoria Loukas"
+date: today
+format:
+  docx:
+    toc: true
+    number-sections: true
+---
+
+# Product Framing
+
+**Target user.** Students and early-career job seekers who want to become Data Scientists or work in similar data-focused careers and need to know which skills to prioritize.
+
+**Career pathway and industry.** Data Scientist roles in Scientific Research and Development Services (NAICS 5417).
+
+**Product question.** What skills are most in demand for Data Scientists in this industry, and what should a job seeker do with that information?
+
+# Scope and Data
+
+We used the MET Career Compass 2026 job-posting data. We filtered to NAICS 5417 and the O\*NET occupation "Data Scientists," which gave 1,120 postings. We removed 190 exact duplicates (same title, employer, location, posting date and salary bounds), leaving 930, and kept postings dated January 6 to August 23, 2026, which gave a final panel of **760 postings and 27 variables**.
+
+Salary was converted to annual values (monthly times 12, hourly times 2,080) and three possible outliers were flagged, not removed. Missing values were labeled "Unknown" or "Not specified," not filled in.
+
+| Field | Available | Coverage |
+|---|---|---|
+| Skills | 733 | 96.4% |
+| Salary | 240 | 31.6% |
+| State | 496 | 65.3% |
+| City | 480 | 63.2% |
+| Work arrangement | 371 | 48.8% |
+
+# Market Baseline
+
+**Salary.** For the 240 postings with a usable salary, the median midpoint is $187,675 and the mean is $195,417. The median minimum is $152,000 and the median maximum is $220,000.
+
+**Location.** Among postings with a known state: California (136), New York (75), Virginia (37), Massachusetts (33), District of Columbia (29), Texas (24), Washington (21), Illinois (17), North Carolina (16) and Maryland (16).
+
+**Work arrangement.** Of 371 postings that state one: hybrid 170, remote 150, on-site 51. The other 389 do not say.
+
+**Experience.** Of 503 postings that list a minimum: 339 ask for 0 years, 28 for 1 to 2 years, 60 for 3 to 5, 60 for 6 to 10 and 16 for more than 10. Another 257 do not specify.
+
+**Employers and titles.** The largest sources are Amazon (55), Tiger Analytics (28) and Pinterest (17). Titles vary widely: "Data Scientists" (207) leads, followed by Machine Learning Engineer (15), Senior Machine Learning Engineer (14) and Senior Data Scientist (14).
+
+# Skill-Gap Analysis
+
+Market expectations come from how often each skill appears among the 733 postings that list skills (counts from the Market Baseline page).
+
+| Skill | Postings | Share |
+|---|---|---|
+| Python | 416 | 56.8% |
+| Machine Learning | 281 | 38.3% |
+| SQL | 197 | 26.9% |
+| TensorFlow | 95 | 13.0% |
+| Deep Learning | 68 | 9.3% |
+| Data Pipelines | 66 | 9.0% |
+| Tableau | 47 | 6.4% |
+| Databricks | 39 | 5.3% |
+| Kubernetes | 38 | 5.2% |
+| Power BI | 37 | 5.0% |
+
+Each member rated themselves from 1 (beginner) to 5 (expert) on 12 skills. Market demand was scaled so the most requested skill equals 5, and each member's gap is the scaled demand minus their rating, with a floor of 0. The individual ratings and gaps are on the project website's Skill Gap Analysis page. *[Team: confirm that the self-ratings on that page are the real ones before submitting.]*
+
+# Final Analytics
+
+**What was modeled.** All 760 postings were grouped into five market segments with K-Means clustering, and visualized with principal component analysis (PCA).
+
+**Why it matters for a job seeker.** The segments show what kinds of postings exist and how pay, experience and work arrangement differ between them.
+
+**Variables used.** Minimum years of experience (filled with the median where missing, with a flag for postings that do not list it), number of listed skills, number of software skills, and work arrangement. Salary was left out of the grouping because it is listed on only 31.6% of postings, and was compared across segments afterward.
+
+**How performance was evaluated.** The silhouette score rose steadily from about 0.28 at k = 2 to about 0.48 at k = 8 without a peak, and the elbow plot had no sharp bend. We fixed k = 5 as a judgment call, with a silhouette score of about 0.40.
+
+| Segment | Postings | Work arrangement | Experience listed | Median salary | Postings with salary |
+|---|---|---|---|---|---|
+| 1 | 261 | Not stated | 100% (median 0 years) | about $200,000 | 49 |
+| 2 | 170 | Hybrid | 67.6% (median 1 year) | about $186,000 | 58 |
+| 3 | 150 | Remote | 60.0% (median 0 years) | about $187,000 | 56 |
+| 4 | 128 | Not stated | 2.3% | about $200,500 | 57 |
+| 5 | 51 | On-site | 66.7% (median 0 years) | about $126,000 | 20 |
+
+**What it means.** The segments are shaped mostly by how a posting states its work arrangement and whether it lists experience, not only by the type of role. For an early-career job seeker, Segment 1 (every posting lists experience, median 0 years) is the clearest fit and Segment 3 is the remote option. On-site postings that list a salary paid the least, but that rests on 20 postings.
+
+# Recommendations
+
+1. Build Python, machine learning and SQL first.
+2. Apply to early-career postings with confidence. 67.4% of postings that list experience ask for 0 years.
+3. Search beyond the title "Data Scientist."
+4. Expect hybrid or remote options, but confirm each posting, since half do not state an arrangement.
+5. Treat the median posted salary of $187,675 as a rough guide and ask about pay early.
+6. Target California, New York, Virginia, Massachusetts and the District of Columbia, and include remote roles.
+7. Close skill gaps with a plan: pair up on the largest gaps and practice on real data.
+
+# Limitations
+
+- The data is a selected sample, not every U.S. Data Scientist opening.
+- Salary is listed on only 31.6% of postings, state on 65.3% and work arrangement on 48.8%, so those findings rest on partial data.
+- Posted salary is a range midpoint, not actual pay.
+- The choice of k = 5 clusters was a judgment call, and segment salary figures rest on 20 to 58 postings each.
+- Missing experience was filled with the median and flagged, so those values are not real data.
+- The product does not yet let a user enter their own skill ratings.
+
+# Team Contributions
+
+*[Team: fill in each member's contributions. Suggested format below.]*
+
+| Member | Contribution |
+|---|---|
+| Richa Nayak | |
+| Benjamin Nagle | |
+| James Lillis | |
+| Victoria Loukas | Predictive Modeling page (K-Means market segments and interpretation) |
+
+# References
+
+MET Career Compass 2026 job-posting data, provided by the course (Boston University Metropolitan College).
+
+Pedregosa, F., et al. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research, 12*, 2825-2830.
+
+Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. *Journal of Computational and Applied Mathematics, 20*, 53-65.

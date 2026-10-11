@@ -1,3 +1,39 @@
 ---
 title: "Final Recommendations"
 ---
+
+These recommendations are for a student or early-career job seeker targeting Data Scientist roles in Scientific Research and Development Services (NAICS 5417). Each one is tied to evidence from our 760-posting panel (January 6 to August 23, 2026).
+
+## 1. Build Python, Machine Learning and SQL first
+
+Among the 733 postings that list skills, Python appears in 416 (56.8%), machine learning in 281 (38.3%) and SQL in 197 (26.9%). Among the other tools we tracked, TensorFlow (95), deep learning (68), Tableau (47), Databricks (39), Kubernetes (38) and Power BI (37) appear less often. Start with the top three, then add one specialty such as TensorFlow or a visualization tool.
+
+## 2. Apply to early-career postings with confidence
+
+Of the 503 postings that list minimum experience, 339 (67.4%) ask for 0 years and only 16 ask for 10 or more. Our largest segment (261 postings) lists experience on every posting, with a median of 0 years. Many postings do not require prior experience, so do not rule yourself out.
+
+## 3. Search beyond the title "Data Scientist"
+
+Relevant roles also appear as Machine Learning Engineer (15), Senior Machine Learning Engineer (14), AI Engineer (6) and similar titles. Searching only for "Data Scientist" will miss part of the market.
+
+## 4. Expect flexible work, but check each posting
+
+Of the 371 postings that state a work arrangement, 86.3% are hybrid (170) or remote (150), and 13.7% are on-site (51). Half of all postings do not say, so confirm the arrangement before applying.
+
+## 5. Use pay figures as a rough guide
+
+The median posted salary midpoint is $187,675, based on the 240 postings (31.6%) that list pay. In our segments, on-site postings with a listed salary paid less (about $126,000, from 20 postings). Ask about pay early, because most postings leave it out.
+
+## 6. Target the main hiring hubs, and include remote roles
+
+California (136 postings), New York (75), Virginia (37), Massachusetts (33) and the District of Columbia (29) lead among postings with a known state. Amazon (55), Tiger Analytics (28) and Pinterest (17) post the most roles, but hiring is spread across many employers, so apply widely.
+
+## 7. Close your own gaps with a plan
+
+Use the Skill Gap Analysis page to see where each team member sits against market demand. Pair up on the largest gaps, run a short weekly skill-share, and practice on this same dataset.
+
+## Next Steps for the Product
+
+- Collect more complete salary and work-arrangement data, since both are missing on most postings.
+- Test the segments on a larger sample and with more features, such as employer type.
+- Add a way for a user to enter their own skill ratings and see their own gaps.
