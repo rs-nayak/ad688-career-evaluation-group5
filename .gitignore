@@ -4,3 +4,5 @@ Jobs_2026/data/
 .venv/
 .vdoc.*
 data/
+   .env
+   __pycache__/
