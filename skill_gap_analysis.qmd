@@ -64,17 +64,17 @@ Scale: 1 = Beginner, 2 = Basic, 3 = Intermediate, 4 = Advanced, 5 = Expert.
 # Keep the order [Richa, James, Ben, Victoria].
 team = {
     "Name": ["Richa", "James", "Ben", "Victoria"],
-    "Python":                [4, 2, 3, 2],
+    "Python":                [4, 2, 3, 3],
     "SQL":                   [3, 2, 2, 2],
     "Machine Learning":      [3, 1, 1, 1],
     "Deep Learning":         [1, 1, 1, 1],
     "TensorFlow":            [1, 1, 1, 1],
-    "Data Pipelines":        [2, 1, 2, 2],
+    "Data Pipelines":        [2, 1, 2, 1],
     "Cloud (AWS/Azure/GCP)": [2, 1, 1, 2],
-    "Statistics":            [3, 2, 2, 2],
+    "Statistics":            [3, 2, 2, 1],
     "Tableau":               [3, 3, 1, 2],
-    "Power BI":              [3, 3, 2, 3],
-    "Databricks":            [1, 1, 2, 2],
+    "Power BI":              [3, 3, 2, 1],
+    "Databricks":            [1, 1, 2, 1],
     "Kubernetes":            [1, 1, 1, 1],
 }
 df_skills = pd.DataFrame(team).set_index("Name")
